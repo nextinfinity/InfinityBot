@@ -1,0 +1,51 @@
+plugins {
+  id "com.github.johnrengelman.shadow" version "2.0.1"
+}
+
+apply plugin: 'java'
+apply plugin: 'maven'
+version = botVersion
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'net.theinfinitymc.infinitybot.InfinityBot'
+    }
+}
+
+repositories {
+    jcenter()
+    maven { url "https://mvnrepository.com/artifact/com.esotericsoftware.yamlbeans/yamlbeans" }
+}
+
+dependencies {
+    compile group: 'net.dv8tion', name: 'JDA', version: jdaVersion
+    compile group: 'com.sedmelluq', name: 'lavaplayer', version: lavaVersion
+    compile group: 'com.sedmelluq', name: 'jda-nas', version: '1.0.6'
+    compile group: 'com.google.apis', name: 'google-api-services-youtube', version: 'v3-rev204-1.23.0'
+    compile group: 'net.dean.jraw', name: 'JRAW', version: '0.9.0'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.10.0'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.10.0'
+    compile group: 'com.esotericsoftware.yamlbeans', name: 'yamlbeans', version: '1.06'
+}
+
+
+def versionFile = 'src/main/java/net/theinfinitymc/infinitybot/Listener.java'
+def tempDir = 'build/tmp/sourcesCache'
+def versionFileName = 'Listener.java'
+
+compileJava.doFirst {
+    copy {
+        from(versionFile)
+        into(tempDir)
+    }
+    ant.replace(file: versionFile, token: '@botVersion@', value: botVersion)
+    ant.replace(file: versionFile, token: '@jdaVersion@', value: jdaVersion)
+    ant.replace(file: versionFile, token: '@lavaVersion@', value: lavaVersion)
+}
+
+compileJava.doLast {
+    copy {
+        from(tempDir + '/' + versionFileName)
+        into(project.file(versionFile).parent)
+    }
+}

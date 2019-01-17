@@ -1,8 +1,6 @@
 package net.theinfinitymc.infinitybot;
 
 import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.MessageBuilder;
-import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -11,11 +9,8 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.theinfinitymc.infinitybot.commands.*;
 import net.theinfinitymc.infinitybot.utils.Config;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 public class Listener extends ListenerAdapter {
 	private JDA jda;
@@ -52,12 +47,12 @@ public class Listener extends ListenerAdapter {
 		commands.put("reddit", new Reddit());
 		commands.put("setkey", new SetKey());
 		commands.put("skip", new Skip());
-		commands.put("soundcloud", new Soundcloud());
+		commands.put("soundcloud", new SoundCloud());
 		commands.put("stats", new Stats());
 		commands.put("stop", new Stop());
 		commands.put("translate", new Translate());
 		commands.put("volume", new Volume());
-		commands.put("youtube", new Youtube());
+		commands.put("youtube", new YouTube());
 	}
 	
 	@Override
@@ -107,5 +102,5 @@ public class Listener extends ListenerAdapter {
 			e1.printStackTrace();
 		}*/
 	}
-	
+
 }

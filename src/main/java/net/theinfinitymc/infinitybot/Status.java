@@ -1,4 +1,4 @@
-package net.theinfinitymc.infinitybot.modules;
+package net.theinfinitymc.infinitybot;
 
 import net.dv8tion.jda.core.entities.Game;
 import net.theinfinitymc.infinitybot.InfinityBot;

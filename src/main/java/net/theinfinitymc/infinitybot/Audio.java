@@ -1,4 +1,4 @@
-package net.theinfinitymc.infinitybot.modules;
+package net.theinfinitymc.infinitybot;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;

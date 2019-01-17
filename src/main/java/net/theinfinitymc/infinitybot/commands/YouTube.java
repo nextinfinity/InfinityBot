@@ -1,4 +1,4 @@
-package net.theinfinitymc.infinitybot.modules;
+package net.theinfinitymc.infinitybot.commands;
 
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.HttpRequest;
@@ -7,11 +7,12 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.SearchResult;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.io.IOException;
 import java.util.List;
 
-public class YouTube {
+public class YouTube implements Command {
 
 	private static com.google.api.services.youtube.YouTube youtube;
 
@@ -24,6 +25,25 @@ public class YouTube {
 			public void initialize(HttpRequest request) throws IOException {
 			}
 		}).setApplicationName("infinitybot-youtube-search").build();
+	}
+
+	@Override
+	public void execute(MessageReceivedEvent event, String[] args) {
+		if(args.length >= 2){
+			int i = 3;
+			String m = args[2];
+			while(i < args.length){
+				m = m + " " + args[i];
+				i++;
+			}
+			final String query = m;
+			attemptAddToQueue(youtube.search(query), e.getGuild(), e.getTextChannel(), e.getAuthor());
+		}
+	}
+
+	@Override
+	public String getDescription() {
+		return null;
 	}
 
 	public String search(String query){
@@ -60,4 +80,5 @@ public class YouTube {
 		}
 		return null;
 	}
+
 }

@@ -4,7 +4,6 @@ import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
-import net.theinfinitymc.infinitybot.modules.Status;
 import net.theinfinitymc.infinitybot.utils.Config;
 import net.theinfinitymc.infinitybot.utils.JsonHandler;
 import org.json.JSONException;

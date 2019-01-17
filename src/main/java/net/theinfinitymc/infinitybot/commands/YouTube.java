@@ -9,6 +9,7 @@ import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.SearchResult;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.theinfinitymc.infinitybot.InfinityBot;
+import net.theinfinitymc.infinitybot.utils.ArgBuilder;
 
 import java.io.IOException;
 import java.util.List;
@@ -30,14 +31,8 @@ public class YouTube implements Command {
 
 	@Override
 	public void execute(MessageReceivedEvent event, String[] args) {
-		if(args.length >= 2){
-			int i = 3;
-			String m = args[2];
-			while(i < args.length){
-				m = m + " " + args[i];
-				i++;
-			}
-			final String query = m;
+		if(args.length >= 1){
+			String query = ArgBuilder.buildString(args);
 			InfinityBot.getAudio().addToQueue(search(query), event.getGuild(), event.getTextChannel(), event.getAuthor());
 		}
 	}
@@ -47,6 +42,7 @@ public class YouTube implements Command {
 		return null;
 	}
 
+	//TODO hide api key
 	public String search(String query){
 
 		try {

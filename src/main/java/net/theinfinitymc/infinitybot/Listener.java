@@ -8,6 +8,7 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.theinfinitymc.infinitybot.commands.*;
 import net.theinfinitymc.infinitybot.utils.Config;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,7 +61,7 @@ public class Listener extends ListenerAdapter {
 		if (msg.startsWith(key)) {
 			Command command = commands.get(msg.substring(key.length()));
 			if (command != null) {
-				command.execute(event, args);
+				command.execute(event, Arrays.copyOfRange(args, 1, args.length));
 			}
 		}
     }

@@ -7,9 +7,10 @@ public class Play implements Command {
 
 	@Override
 	public void execute(MessageReceivedEvent event, String[] args) {
-		if(args.length == 2){
-			String song = args[1];
-			InfinityBot.getAudio().addToQueue(song, event.getGuild(), event.getTextChannel(), event.getAuthor());
+		if(args.length > 0){
+			for (String song : args) {
+				InfinityBot.getAudio().addToQueue(song, event.getGuild(), event.getTextChannel(), event.getAuthor());
+			}
 		}
 	}
 

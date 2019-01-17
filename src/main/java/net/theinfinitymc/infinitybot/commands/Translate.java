@@ -2,34 +2,27 @@ package net.theinfinitymc.infinitybot.commands;
 
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.theinfinitymc.infinitybot.InfinityBot;
+import net.theinfinitymc.infinitybot.utils.ArgBuilder;
 import net.theinfinitymc.infinitybot.utils.Config;
 import net.theinfinitymc.infinitybot.utils.JsonHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class Translate implements Command {
 
 	@Override
 	public void execute(MessageReceivedEvent event, String[] args) {
-		if(args.length >= 3){
-			int i = 3;
-			String m = args[2];
-			while(i < args.length){
-				m = m + " " + args[i];
-				i++;
-			}
-			final String query = m;
-			final String lang = args[1].toLowerCase();
-			InfinityBot.getThreadPool().execute(new Runnable(){
-				@Override
-				public void run(){
-					try {
-						event.getChannel().sendMessage(translate(query, lang)).queue();
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+		if(args.length >= 2){
+			String query = ArgBuilder.buildString(Arrays.copyOfRange(args, 1, args.length - 1));
+			final String lang = args[0].toLowerCase();
+			InfinityBot.getThreadPool().execute(() -> {
+				try {
+					event.getChannel().sendMessage(translate(query, lang)).queue();
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			});
 		}
@@ -42,7 +35,7 @@ public class Translate implements Command {
 
 	public String translate(String s, String l) throws JSONException, IOException {
 		String query = format(s);
-		String lang = "";
+		String lang;
 		if(InfinityBot.getLangs().containsKey(l)){
 			lang = InfinityBot.getLangs().get(l);
 		}else{

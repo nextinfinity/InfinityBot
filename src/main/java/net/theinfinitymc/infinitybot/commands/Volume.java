@@ -7,8 +7,8 @@ public class Volume implements Command {
 
 	@Override
 	public void execute(MessageReceivedEvent event, String[] args) {
-		if(args.length == 2){
-			Integer vol = Integer.parseInt(args[1]);
+		if(args.length > 0){
+			Integer vol = Integer.parseInt(args[0]);
 			if(vol > 1000){
 				vol = 1000;
 			}

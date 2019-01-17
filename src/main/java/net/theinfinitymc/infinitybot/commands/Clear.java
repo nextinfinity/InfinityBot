@@ -14,8 +14,8 @@ public class Clear implements Command {
 		if(event.getMember().hasPermission(Permission.MESSAGE_MANAGE)){
 			delete(event.getMessage());
 			int amount = 10;
-			if(args.length > 1){
-				int i = Integer.parseInt(args[1]);
+			if(args.length > 0){
+				int i = Integer.parseInt(args[0]);
 				if(i > 0) amount = i;
 			}
 			List<Message> list = new MessageHistory(event.getChannel()).retrievePast(amount).complete();

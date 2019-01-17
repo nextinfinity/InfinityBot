@@ -17,10 +17,9 @@ import java.util.concurrent.Executors;
 
 public class InfinityBot {
 
-	public static JDA api;
-	private static Listener listener;
-	private static HashMap<String, String> langs = new HashMap<String, String>();
-	private static ExecutorService es;
+	private static JDA api;
+	private static HashMap<String, String> langs = new HashMap<>();
+	private static ExecutorService pool;
 	private static Audio audio;
 
 	public static void main(String[] args) {
@@ -28,7 +27,6 @@ public class InfinityBot {
 			Config.loadConfig();
 			Config.loadKeys();
 			Config.loadLists();
-			//Phrase.load();
 		}catch(IOException e){
 			e.printStackTrace();
 		}
@@ -41,8 +39,7 @@ public class InfinityBot {
 
 		try {
 			api = new JDABuilder(AccountType.BOT).setToken(token).setAudioSendFactory(new NativeAudioSendFactory()).buildAsync();
-			listener = new Listener(api);
-			api.addEventListener(listener);
+			api.addEventListener(new Listener(api));
 			Status.start();
 		} catch (LoginException | IllegalArgumentException e) {
 			e.printStackTrace();
@@ -52,7 +49,7 @@ public class InfinityBot {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		es = Executors.newCachedThreadPool();
+		pool = Executors.newCachedThreadPool();
 
 		audio = new Audio();
 	}
@@ -66,8 +63,12 @@ public class InfinityBot {
 		}
 	}
 
+	public static JDA getAPI() {
+		return api;
+	}
+
 	public static ExecutorService getThreadPool(){
-		return es;
+		return pool;
 	}
 	
 	public static HashMap<String, String> getLangs(){

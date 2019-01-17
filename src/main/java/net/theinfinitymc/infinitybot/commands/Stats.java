@@ -22,7 +22,7 @@ public class Stats implements Command {
 
 	@Override
 	public void execute(MessageReceivedEvent event, String[] args) {
-		if(args.length > 1){
+		if(args.length > 0){
 			for(User u : event.getMessage().getMentionedUsers()){
 				event.getChannel().sendMessage(new MessageBuilder()
 						.append("Stats for ").append(u)

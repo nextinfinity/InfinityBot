@@ -6,7 +6,7 @@ public class Help implements Command {
 
 	@Override
 	public void execute(MessageReceivedEvent event, String[] args) {
-
+		//TODO help command
 	}
 
 	@Override

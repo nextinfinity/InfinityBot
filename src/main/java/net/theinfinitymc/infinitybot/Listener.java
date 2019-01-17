@@ -1,7 +1,6 @@
 package net.theinfinitymc.infinitybot;
 
 import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.PermissionException;
@@ -15,14 +14,10 @@ import java.util.Map;
 public class Listener extends ListenerAdapter {
 	private JDA jda;
 
-	private Long start;
-	private Integer messages = 0;
-
 	private Map<String, Command> commands = new HashMap<>();
 	
 	public Listener(JDA jda){
 		this.jda = jda;
-		this.start = System.currentTimeMillis();
 
 		registerCommands();
 	}
@@ -48,7 +43,7 @@ public class Listener extends ListenerAdapter {
 		commands.put("setkey", new SetKey());
 		commands.put("skip", new Skip());
 		commands.put("soundcloud", new SoundCloud());
-		commands.put("stats", new Stats());
+		commands.put("stats", new Stats(jda));
 		commands.put("stop", new Stop());
 		commands.put("translate", new Translate());
 		commands.put("volume", new Volume());
@@ -57,7 +52,6 @@ public class Listener extends ListenerAdapter {
 	
 	@Override
 	public void onMessageReceived(MessageReceivedEvent event){
-		messages++;
 		if(event.getAuthor().getId() == event.getJDA().getSelfUser().getId()) return;
 		if(event.getAuthor().isBot()) return;
     	String[] args = event.getMessage().getContentStripped().split(" ");

@@ -1,5 +1,6 @@
 package net.theinfinitymc.infinitybot.commands;
 
+import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
@@ -10,6 +11,14 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class Stats implements Command {
+
+	private final long start;
+	private final JDA jda;
+
+	public Stats(JDA jda) {
+		this.start = System.currentTimeMillis();
+		this.jda = jda;
+	}
 
 	@Override
 	public void execute(MessageReceivedEvent event, String[] args) {
@@ -31,16 +40,10 @@ public class Stats implements Command {
 			Long min = TimeUnit.MILLISECONDS.toMinutes(time) - days*1440 - hours*60;
 			Long sec = TimeUnit.MILLISECONDS.toSeconds(time) - days*86400 - hours*3600 - min*60;
 			String fTime = days + " days " + hours + ":" + min + ":" + sec;
-			Integer conn = 0;
-			for(Guild guild : e.getJDA().getGuilds()){
-				if(guild.getAudioManager().isConnected()) conn++;
-			}
 			event.getChannel().sendMessage("Stats for " + event.getJDA().getSelfUser().getAsMention() +
 					"\nServers Joined: " + event.getJDA().getGuilds().size() +
 					"\nUnique Users: " + calculateUniqueUsers() +
-					"\nUptime: " + fTime +
-					"\nProcessed Messages: " + messages +
-					"\nCurrent Audio Connections: " + conn).queue();
+					"\nUptime: " + fTime).queue();
 		}
 	}
 

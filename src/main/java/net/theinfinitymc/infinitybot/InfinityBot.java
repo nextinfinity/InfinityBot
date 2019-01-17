@@ -16,10 +16,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class InfinityBot {
+
 	public static JDA api;
 	private static Listener listener;
 	private static HashMap<String, String> langs = new HashMap<String, String>();
 	private static ExecutorService es;
+	private static Audio audio;
 
 	public static void main(String[] args) {
 		try {
@@ -51,6 +53,8 @@ public class InfinityBot {
 			e.printStackTrace();
 		}
 		es = Executors.newCachedThreadPool();
+
+		audio = new Audio();
 	}
 	
 	private static void initLangs(String l) throws JSONException, IOException{
@@ -65,12 +69,12 @@ public class InfinityBot {
 	public static ExecutorService getThreadPool(){
 		return es;
 	}
-
-	public static Listener getListener(){
-		return listener;
-	}
 	
 	public static HashMap<String, String> getLangs(){
 		return langs;
+	}
+
+	public static Audio getAudio() {
+		return audio;
 	}
 }

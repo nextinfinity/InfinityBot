@@ -14,8 +14,8 @@ public class Stats implements Command {
 	@Override
 	public void execute(MessageReceivedEvent event, String[] args) {
 		if(args.length > 1){
-			for(User u : e.getMessage().getMentionedUsers()){
-				e.getChannel().sendMessage(new MessageBuilder()
+			for(User u : event.getMessage().getMentionedUsers()){
+				event.getChannel().sendMessage(new MessageBuilder()
 						.append("Stats for ").append(u)
 						.append("\nUsername: " + u.getName())
 						.append("\nID: " + u.getId())
@@ -35,8 +35,8 @@ public class Stats implements Command {
 			for(Guild guild : e.getJDA().getGuilds()){
 				if(guild.getAudioManager().isConnected()) conn++;
 			}
-			e.getChannel().sendMessage("Stats for " + e.getJDA().getSelfUser().getAsMention() +
-					"\nServers Joined: " + e.getJDA().getGuilds().size() +
+			event.getChannel().sendMessage("Stats for " + event.getJDA().getSelfUser().getAsMention() +
+					"\nServers Joined: " + event.getJDA().getGuilds().size() +
 					"\nUnique Users: " + calculateUniqueUsers() +
 					"\nUptime: " + fTime +
 					"\nProcessed Messages: " + messages +

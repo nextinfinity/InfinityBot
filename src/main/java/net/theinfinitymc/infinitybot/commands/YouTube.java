@@ -8,6 +8,7 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.SearchResult;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.theinfinitymc.infinitybot.InfinityBot;
 
 import java.io.IOException;
 import java.util.List;
@@ -37,7 +38,7 @@ public class YouTube implements Command {
 				i++;
 			}
 			final String query = m;
-			attemptAddToQueue(youtube.search(query), e.getGuild(), e.getTextChannel(), e.getAuthor());
+			InfinityBot.getAudio().addToQueue(search(query), event.getGuild(), event.getTextChannel(), event.getAuthor());
 		}
 	}
 

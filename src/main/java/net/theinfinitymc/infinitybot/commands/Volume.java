@@ -1,6 +1,7 @@
 package net.theinfinitymc.infinitybot.commands;
 
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.theinfinitymc.infinitybot.InfinityBot;
 
 public class Volume implements Command {
 
@@ -14,8 +15,8 @@ public class Volume implements Command {
 			if(vol < 0){
 				vol = 0;
 			}
-			audio.setVolume(vol, e.getGuild());
-			e.getChannel().sendMessage("Volume set to " + vol + "!").queue();
+			InfinityBot.getAudio().setVolume(vol, event.getGuild());
+			event.getChannel().sendMessage("Volume set to " + vol + "!").queue();
 		}
 	}
 

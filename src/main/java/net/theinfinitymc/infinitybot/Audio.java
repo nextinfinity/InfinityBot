@@ -10,6 +10,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.entities.User;
 import net.theinfinitymc.infinitybot.AudioListener;
 import net.theinfinitymc.infinitybot.utils.AudioPlayerSendHandler;
 
@@ -60,7 +61,24 @@ public class Audio {
 			  }
 			});
 	}
-	
+
+	public void addToQueue(String song, Guild guild, TextChannel channel, User user){
+		if(guild.getMember(user).getVoiceState().inVoiceChannel()){
+			if(!guild.getAudioManager().isConnected()){
+				try{
+					guild.getAudioManager().openAudioConnection(guild.getMember(user).getVoiceState().getChannel());
+				}catch(Exception ex){
+					guild.getAudioManager().closeAudioConnection();
+					channel.sendMessage("Error joining voice channel!").queue();
+					return;
+				}
+			}
+			load(song, guild, channel);
+		}else{
+			channel.sendMessage("You must be in a voice channel to play a song!").queue();;
+		}
+	}
+
 	public void setVolume(Integer vol, Guild g){
 		if(isPlaying(g)) getPlayer(g).setVolume(vol);
 	}

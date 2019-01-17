@@ -1,6 +1,7 @@
 package net.theinfinitymc.infinitybot.commands;
 
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.theinfinitymc.infinitybot.InfinityBot;
 import net.theinfinitymc.infinitybot.utils.JsonHandler;
 import org.json.JSONArray;
 
@@ -16,7 +17,7 @@ public class SoundCloud implements Command {
 				i++;
 			}
 			final String query = m;
-			attemptAddToQueue(search(query), e.getGuild(), e.getTextChannel(), e.getAuthor());
+			InfinityBot.getAudio().addToQueue(search(query), event.getGuild(), event.getTextChannel(), event.getAuthor());
 		}
 	}
 

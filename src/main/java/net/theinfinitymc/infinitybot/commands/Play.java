@@ -1,6 +1,7 @@
 package net.theinfinitymc.infinitybot.commands;
 
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.theinfinitymc.infinitybot.InfinityBot;
 
 public class Play implements Command {
 
@@ -8,7 +9,7 @@ public class Play implements Command {
 	public void execute(MessageReceivedEvent event, String[] args) {
 		if(args.length == 2){
 			String song = args[1];
-			attemptAddToQueue(song, e.getGuild(), e.getTextChannel(), e.getAuthor());
+			InfinityBot.getAudio().addToQueue(song, event.getGuild(), event.getTextChannel(), event.getAuthor());
 		}
 	}
 

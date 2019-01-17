@@ -44,7 +44,7 @@ public class Reddit implements Command {
 				InfinityBot.getThreadPool().execute(new Runnable(){
 					@Override
 					public void run(){
-						e.getChannel().sendMessage(reddit.subredditSearch(args[1].toLowerCase(), search[0], search[1], count)).queue();
+						event.getChannel().sendMessage(subredditSearch(args[1].toLowerCase(), search[0], search[1], count)).queue();
 					}
 				});
 			}else{
@@ -59,7 +59,7 @@ public class Reddit implements Command {
 				InfinityBot.getThreadPool().execute(new Runnable(){
 					@Override
 					public void run(){
-						e.getChannel().sendMessage(reddit.subredditSearch(args[1].toLowerCase(), search[0], search[1], search[2], count)).queue();
+						event.getChannel().sendMessage(subredditSearch(args[1].toLowerCase(), search[0], search[1], search[2], count)).queue();
 					}
 				});
 			}
@@ -71,6 +71,7 @@ public class Reddit implements Command {
 		return null;
 	}
 
+	//TODO hide credentials
 	protected final RedditClient reddit = new RedditClient(UserAgent.of("desktop",
 			"net.theinfinitymc.infinitybot",
 			"v" + Version.get().formatted(),

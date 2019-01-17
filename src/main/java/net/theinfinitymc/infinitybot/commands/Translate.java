@@ -26,7 +26,7 @@ public class Translate implements Command {
 				@Override
 				public void run(){
 					try {
-						e.getChannel().sendMessage(translate(query, lang)).queue();
+						event.getChannel().sendMessage(translate(query, lang)).queue();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

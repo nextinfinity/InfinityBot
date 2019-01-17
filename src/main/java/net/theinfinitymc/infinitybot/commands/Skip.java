@@ -1,15 +1,18 @@
 package net.theinfinitymc.infinitybot.commands;
 
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.theinfinitymc.infinitybot.Audio;
+import net.theinfinitymc.infinitybot.InfinityBot;
 
 public class Skip implements Command {
 
 	@Override
 	public void execute(MessageReceivedEvent event, String[] args) {
-		if(audio.isPlaying(e.getGuild())){
-			audio.skip(e.getGuild());
+		Audio audio = InfinityBot.getAudio();
+		if(audio.isPlaying(event.getGuild())){
+			audio.skip(event.getGuild());
 		}else{
-			e.getChannel().sendMessage("Music is not playing!").queue();
+			event.getChannel().sendMessage("Music is not playing!").queue();
 		}
 	}
 

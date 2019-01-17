@@ -11,14 +11,14 @@ public class Clear implements Command {
 
 	@Override
 	public void execute(MessageReceivedEvent event, String[] args) {
-		if(e.getMember().hasPermission(Permission.MESSAGE_MANAGE)){
-			delete(e.getMessage());
+		if(event.getMember().hasPermission(Permission.MESSAGE_MANAGE)){
+			delete(event.getMessage());
 			int amount = 10;
 			if(args.length > 1){
 				int i = Integer.parseInt(args[1]);
 				if(i > 0) amount = i;
 			}
-			List<Message> list = new MessageHistory(e.getChannel()).retrievePast(amount).complete();
+			List<Message> list = new MessageHistory(event.getChannel()).retrievePast(amount).complete();
 			for(Message m : list){
 				delete(m);
 			}

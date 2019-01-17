@@ -11,14 +11,14 @@ public class Admin implements Command {
 
 	@Override
 	public void execute(MessageReceivedEvent event, String[] args) {
-		if(e.getAuthor().getId().equalsIgnoreCase(Config.getAdminId())){
+		if(event.getAuthor().getId().equalsIgnoreCase(Config.getAdminId())){
 			if(args.length > 1){
 				if(args[1].equalsIgnoreCase("servers")){
 					String text = "__**Joined Servers**__";
-					for(Guild g : e.getJDA().getGuilds()){
+					for(Guild g : event.getJDA().getGuilds()){
 						text = text + "\n" + g.getName();
 					}
-					e.getChannel().sendMessage(text).queue();
+					event.getChannel().sendMessage(text).queue();
 				}
 				if(args[1].equalsIgnoreCase("serverinfo")){
 					if(args.length >= 3){
@@ -28,7 +28,7 @@ public class Admin implements Command {
 							m = m + " " + args[i];
 							i++;
 						}
-						List<Guild> guilds = e.getJDA().getGuildsByName(m, true);
+						List<Guild> guilds = event.getJDA().getGuildsByName(m, true);
 						if(guilds != null && guilds.size() >= 1){
 							Guild g = guilds.get(0);
 							String text = "__**Server Info: " + g.getName() + "**__"
@@ -36,7 +36,7 @@ public class Admin implements Command {
 									+ "\nUsers: " + g.getMembers().size()
 									+ "\nText Channels: " + g.getTextChannels().size()
 									+ "\nVoice Channels: " + g.getVoiceChannels().size();
-							e.getChannel().sendMessage(text).queue();
+							event.getChannel().sendMessage(text).queue();
 						}
 					}
 				}
@@ -48,14 +48,14 @@ public class Admin implements Command {
 							m = m + " " + args[i];
 							i++;
 						}
-						List<Guild> guilds = e.getJDA().getGuildsByName(m, true);
+						List<Guild> guilds = event.getJDA().getGuildsByName(m, true);
 						if(guilds != null && guilds.size() >= 1){
 							Guild g = guilds.get(0);
 							String text = "__**Users in " + g.getName() + "**__";
 							for(Member mem: g.getMembers()){
 								text = text + "\n" + mem.getEffectiveName();
 							}
-							e.getChannel().sendMessage(text).queue();
+							event.getChannel().sendMessage(text).queue();
 						}
 					}
 				}

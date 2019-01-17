@@ -71,23 +71,6 @@ public class Listener extends ListenerAdapter {
 		}
     }
 	
-	private void attemptAddToQueue(String song, Guild guild, TextChannel channel, User user){
-		if(guild.getMember(user).getVoiceState().inVoiceChannel()){
-    		if(!guild.getAudioManager().isConnected()){
-    			try{
-					guild.getAudioManager().openAudioConnection(guild.getMember(user).getVoiceState().getChannel());
-				}catch(Exception ex){
-					guild.getAudioManager().closeAudioConnection();
-					channel.sendMessage("Error joining voice channel!").queue();
-					return;
-				}
-			}
-			audio.load(song, guild, channel);
-    	}else{
-    		channel.sendMessage("You must be in a voice channel to play a song!").queue();;
-    	}
-	}
-	
 	@Override
 	public void onGuildJoin(GuildJoinEvent e){
 		try{

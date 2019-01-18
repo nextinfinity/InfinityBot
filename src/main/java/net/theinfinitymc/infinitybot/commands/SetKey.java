@@ -8,11 +8,11 @@ public class SetKey implements Command {
 
 	@Override
 	public void execute(MessageReceivedEvent event, String[] args) {
-		if(event.getMember().hasPermission(Permission.ADMINISTRATOR)){
-			if(args.length == 1){
-				try{
+		if (event.getMember().hasPermission(Permission.ADMINISTRATOR)) {
+			if (args.length == 1) {
+				try {
 					Config.setKey(args[0], event.getGuild());
-				}catch(Exception ex){
+				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
 			}

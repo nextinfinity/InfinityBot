@@ -18,7 +18,7 @@ public class YouTube implements Command {
 
 	private static com.google.api.services.youtube.YouTube youtube;
 
-	public YouTube(){
+	public YouTube() {
 		// This object is used to make YouTube Data API requests. The last
 		// argument is required, but since we don't need anything
 		// initialized when the HttpRequest is initialized, we override
@@ -31,7 +31,7 @@ public class YouTube implements Command {
 
 	@Override
 	public void execute(MessageReceivedEvent event, String[] args) {
-		if(args.length >= 1){
+		if (args.length >= 1) {
 			String query = ArgBuilder.buildString(args);
 			InfinityBot.getAudio().addToQueue(search(query), event.getGuild(), event.getTextChannel(), event.getAuthor());
 		}
@@ -43,7 +43,7 @@ public class YouTube implements Command {
 	}
 
 	//TODO hide api key
-	public String search(String query){
+	public String search(String query) {
 
 		try {
 			// Define the API request for retrieving search results.

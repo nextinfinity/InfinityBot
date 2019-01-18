@@ -16,8 +16,8 @@ public class Listener extends ListenerAdapter {
 	private JDA jda;
 
 	private Map<String, Command> commands = new HashMap<>();
-	
-	public Listener(JDA jda){
+
+	Listener(JDA jda) {
 		this.jda = jda;
 
 		registerCommands();
@@ -50,13 +50,13 @@ public class Listener extends ListenerAdapter {
 		commands.put("volume", new Volume());
 		commands.put("youtube", new YouTube());
 	}
-	
+
 	@Override
-	public void onMessageReceived(MessageReceivedEvent event){
-		if(event.getAuthor().getId() == event.getJDA().getSelfUser().getId()) return;
-		if(event.getAuthor().isBot()) return;
-    	String[] args = event.getMessage().getContentStripped().split(" ");
-    	String key = Config.getKey(event.getGuild());
+	public void onMessageReceived(MessageReceivedEvent event) {
+		if (event.getAuthor().getId().equals(event.getJDA().getSelfUser().getId())) return;
+		if (event.getAuthor().isBot()) return;
+		String[] args = event.getMessage().getContentStripped().split(" ");
+		String key = Config.getKey(event.getGuild());
 		String msg = args[0].toLowerCase();
 		if (msg.startsWith(key)) {
 			Command command = commands.get(msg.substring(key.length()));
@@ -64,13 +64,14 @@ public class Listener extends ListenerAdapter {
 				command.execute(event, Arrays.copyOfRange(args, 1, args.length));
 			}
 		}
-    }
-	
+	}
+
 	@Override
-	public void onGuildJoin(GuildJoinEvent e){
-		try{
+	public void onGuildJoin(GuildJoinEvent e) {
+		try {
 			e.getGuild().getTextChannels().get(0).sendMessage("Hello! I am Infinity Bot. To see what I can do, type '" + Config.getKey(e.getGuild()) + "help'").queue();
-		}catch(PermissionException ex){}
+		} catch (PermissionException ex) {
+		}
 		/*try {
 			JSONObject obj = new JSONObject().put("server_count", e.getJDA().getGuilds().size());
 			Unirest.post("https://bots.discord.pw/api/bots/190953977129598976/stats")

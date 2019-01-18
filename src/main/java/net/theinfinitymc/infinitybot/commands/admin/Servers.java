@@ -9,7 +9,7 @@ public class Servers implements Command {
 	@Override
 	public void execute(MessageReceivedEvent event, String[] args) {
 		String text = "__**Joined Servers**__";
-		for(Guild g : event.getJDA().getGuilds()){
+		for (Guild g : event.getJDA().getGuilds()) {
 			text = text + "\n" + g.getName();
 		}
 		event.getChannel().sendMessage(text).queue();

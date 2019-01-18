@@ -64,26 +64,26 @@ public class Reddit implements Command {
 		return null;
 	}
 
-	private String subredditSearch(String sr, String sort, String time, Integer amount){
+	private String subredditSearch(String sr, String sort, String time, Integer amount) {
 		return subredditSearch(sr, null, sort, time, amount);
 	}
 
-	private String subredditSearch(String sr, String query, String sort, String time, Integer amount){
+	private String subredditSearch(String sr, String query, String sort, String time, Integer amount) {
 		authenticate();
 		SubmissionSearchPaginator sp = new SubmissionSearchPaginator(reddit, query);
 		sp.setSubreddit(sr);
 		SubmissionSearchPaginator.SearchSort sorting = SubmissionSearchPaginator.SearchSort.RELEVANCE;
-		if(sort != null && SubmissionSearchPaginator.SearchSort.valueOf(sort) != null){
+		if (sort != null && SubmissionSearchPaginator.SearchSort.valueOf(sort) != null) {
 			sorting = SubmissionSearchPaginator.SearchSort.valueOf(sort);
 		}
 		sp.setSearchSorting(sorting);
 		TimePeriod period = TimePeriod.ALL;
-		if(time != null && TimePeriod.valueOf(time) != null){
+		if (time != null && TimePeriod.valueOf(time) != null) {
 			period = TimePeriod.valueOf(time);
 		}
 		sp.setTimePeriod(period);
 		Integer limit = 10;
-		if(amount != null){
+		if (amount != null) {
 			limit = amount;
 		}
 		sp.setLimit(limit);
@@ -93,7 +93,7 @@ public class Reddit implements Command {
 		return "**" + sub.getTitle() + "**\n" + sub.getUrl();
 	}
 
-	private void authenticate(){
+	private void authenticate() {
 		Credentials credentials = Credentials.script("NextInfinityBot", "RNmc0118", "C3_2a1Y8-kRqnA", "OuWrCgqV5LRuuJUtG0izuk-oKBI");
 		OAuthData authData;
 		try {

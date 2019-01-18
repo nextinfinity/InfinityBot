@@ -26,8 +26,8 @@ public class Admin implements Command {
 
 	@Override
 	public void execute(MessageReceivedEvent event, String[] args) {
-		if(event.getAuthor().getId().equalsIgnoreCase(Config.getAdminId())){
-			if(args.length > 1){
+		if (event.getAuthor().getId().equalsIgnoreCase(Config.getAdminId())) {
+			if (args.length > 1) {
 				String[] filteredArgs = Arrays.copyOfRange(args, 1, args.length);
 				Command command = adminCommands.get(args[0].toLowerCase());
 				if (command != null) {

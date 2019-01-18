@@ -22,23 +22,23 @@ class Status {
 	private static int i;
 	private static int n = 2;
 
-	static void start(){
+	static void start() {
 		TIMER.purge();
 		i = new Random().nextInt(GAMES.length);
-		while(GAMES.length % n != 0){
+		while (GAMES.length % n != 0) {
 			n++;
 		}
 		TIMER.scheduleAtFixedRate(
-				new TimerTask(){
+				new TimerTask() {
 					@Override
-					public void run(){
+					public void run() {
 						i += n;
-						if(i >= GAMES.length) i -= GAMES.length;
+						if (i >= GAMES.length) i -= GAMES.length;
 						Game game = GAMES[i];
 						InfinityBot.getAPI().getPresence().setGame(game);
 					}
 				}
-				,0,5*60*1000);
+				, 0, 5 * 60 * 1000);
 	}
 
 }

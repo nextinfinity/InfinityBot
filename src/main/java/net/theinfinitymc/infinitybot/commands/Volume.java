@@ -7,12 +7,12 @@ public class Volume implements Command {
 
 	@Override
 	public void execute(MessageReceivedEvent event, String[] args) {
-		if(args.length > 0){
+		if (args.length > 0) {
 			Integer vol = Integer.parseInt(args[0]);
-			if(vol > 1000){
+			if (vol > 1000) {
 				vol = 1000;
 			}
-			if(vol < 0){
+			if (vol < 0) {
 				vol = 0;
 			}
 			InfinityBot.getAudio().setVolume(vol, event.getGuild());

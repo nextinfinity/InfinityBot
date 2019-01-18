@@ -13,7 +13,7 @@ public class ServerInfo implements Command {
 	public void execute(MessageReceivedEvent event, String[] args) {
 		String name = ArgBuilder.buildString(args);
 		List<Guild> guilds = event.getJDA().getGuildsByName(name, true);
-		if(guilds != null && guilds.size() >= 1){
+		if (guilds != null && guilds.size() >= 1) {
 			Guild guild = guilds.get(0);
 			String text = "__**Server Info: " + guild.getName() + "**__"
 					+ "\nOwner: " + guild.getOwner().getEffectiveName()

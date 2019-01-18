@@ -22,8 +22,8 @@ public class Stats implements Command {
 
 	@Override
 	public void execute(MessageReceivedEvent event, String[] args) {
-		if(args.length > 0){
-			for(User u : event.getMessage().getMentionedUsers()){
+		if (args.length > 0) {
+			for (User u : event.getMessage().getMentionedUsers()) {
 				event.getChannel().sendMessage(new MessageBuilder()
 						.append("Stats for ").append(u)
 						.append("\nUsername: " + u.getName())
@@ -33,12 +33,12 @@ public class Stats implements Command {
 						.append("\nServers Shared: " + calculateSharedServers(u))
 						.build()).queue();
 			}
-		}else{
+		} else {
 			Long time = System.currentTimeMillis() - this.start;
 			Long days = TimeUnit.MILLISECONDS.toDays(time);
-			Long hours = TimeUnit.MILLISECONDS.toHours(time) - days*24;
-			Long min = TimeUnit.MILLISECONDS.toMinutes(time) - days*1440 - hours*60;
-			Long sec = TimeUnit.MILLISECONDS.toSeconds(time) - days*86400 - hours*3600 - min*60;
+			Long hours = TimeUnit.MILLISECONDS.toHours(time) - days * 24;
+			Long min = TimeUnit.MILLISECONDS.toMinutes(time) - days * 1440 - hours * 60;
+			Long sec = TimeUnit.MILLISECONDS.toSeconds(time) - days * 86400 - hours * 3600 - min * 60;
 			String fTime = days + " days " + hours + ":" + min + ":" + sec;
 			event.getChannel().sendMessage("Stats for " + event.getJDA().getSelfUser().getAsMention() +
 					"\nServers Joined: " + event.getJDA().getGuilds().size() +
@@ -52,23 +52,23 @@ public class Stats implements Command {
 		return null;
 	}
 
-	private Integer calculateSharedServers(User u){
+	private Integer calculateSharedServers(User u) {
 		Integer n = 0;
-		for(Guild g : jda.getGuilds()){
-			for(Member m : g.getMembers()){
-				if(m.getUser() == u) n++;
+		for (Guild g : jda.getGuilds()) {
+			for (Member m : g.getMembers()) {
+				if (m.getUser() == u) n++;
 				break;
 			}
 		}
 		return n;
 	}
 
-	private Integer calculateUniqueUsers(){
+	private Integer calculateUniqueUsers() {
 		ArrayList<String> users = new ArrayList<String>();
-		for(Guild g : jda.getGuilds()){
-			for(Member m : g.getMembers()){
+		for (Guild g : jda.getGuilds()) {
+			for (Member m : g.getMembers()) {
 				User u = m.getUser();
-				if(!users.contains(u.getId())){
+				if (!users.contains(u.getId())) {
 					users.add(u.getId());
 				}
 			}

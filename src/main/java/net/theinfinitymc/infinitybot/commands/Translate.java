@@ -15,7 +15,7 @@ public class Translate implements Command {
 
 	@Override
 	public void execute(MessageReceivedEvent event, String[] args) {
-		if(args.length >= 2){
+		if (args.length >= 2) {
 			String query = ArgBuilder.buildString(Arrays.copyOfRange(args, 1, args.length - 1));
 			final String lang = args[0].toLowerCase();
 			InfinityBot.getThreadPool().execute(() -> {
@@ -36,9 +36,9 @@ public class Translate implements Command {
 	public String translate(String s, String l) throws JSONException, IOException {
 		String query = format(s);
 		String lang;
-		if(InfinityBot.getLangs().containsKey(l)){
+		if (InfinityBot.getLangs().containsKey(l)) {
 			lang = InfinityBot.getLangs().get(l);
-		}else{
+		} else {
 			return "An invalid language was specified!";
 		}
 		String url = ("https://translate.yandex.net/api/v1.5/tr.json/translate?key=" + Config.getTranslateKey() + "&text=" + query + "&lang=" + lang);
@@ -46,11 +46,11 @@ public class Translate implements Command {
 		return results.getJSONArray("text").getString(0);
 	}
 
-	private String format(String s){
+	private String format(String s) {
 		String formatted = "";
 		String[] substrings = s.split(" ");
-		for(String sub : substrings){
-			if(!sub.equalsIgnoreCase(substrings[0])){
+		for (String sub : substrings) {
+			if (!sub.equalsIgnoreCase(substrings[0])) {
 				formatted = formatted + "%20";
 			}
 			formatted = formatted + sub;

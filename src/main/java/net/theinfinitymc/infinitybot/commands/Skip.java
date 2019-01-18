@@ -9,9 +9,9 @@ public class Skip implements Command {
 	@Override
 	public void execute(MessageReceivedEvent event, String[] args) {
 		Audio audio = InfinityBot.getAudio();
-		if(audio.isPlaying(event.getGuild())){
+		if (audio.isPlaying(event.getGuild())) {
 			audio.skip(event.getGuild());
-		}else{
+		} else {
 			event.getChannel().sendMessage("Music is not playing!").queue();
 		}
 	}

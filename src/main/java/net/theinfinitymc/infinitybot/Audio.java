@@ -20,14 +20,14 @@ public class Audio {
 	private AudioPlayerManager playerManager;
 	private HashMap<Guild, AudioListener> listeners = new HashMap<>();
 	
-	public Audio(){
+	Audio(){
 		playerManager = new DefaultAudioPlayerManager();
 		AudioSourceManagers.registerRemoteSources(playerManager);
 		playerManager.setFrameBufferDuration(10000);
 		playerManager.setTrackStuckThreshold(5000);
 	}
 	
-	public void load(String link, Guild g, TextChannel c){
+	private void load(String link, Guild g, TextChannel c){
 		if(getPlayer(g) == null) createPlayer(g, c);
 		playerManager.loadItem(link, new AudioLoadResultHandler() {
 			  @Override

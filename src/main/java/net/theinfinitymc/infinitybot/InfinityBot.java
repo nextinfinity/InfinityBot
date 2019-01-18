@@ -27,13 +27,13 @@ public class InfinityBot {
 			Config.loadConfig();
 			Config.loadKeys();
 			Config.loadLists();
-		}catch(IOException e){
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 		String token = Config.getToken();
-		
-		if(token == null) {
+
+		if (token == null) {
 			System.out.println("Please set the token in the config.yml file!");
 		}
 
@@ -53,13 +53,13 @@ public class InfinityBot {
 
 		audio = new Audio();
 	}
-	
-	private static void initLangs(String l) throws JSONException, IOException{
+
+	private static void initLangs(String l) throws JSONException, IOException {
 		String url = ("https://translate.yandex.net/api/v1.5/tr.json/getLangs?key=" + Config.getTranslateKey() + "&ui=" + l);
 		JSONObject results = JsonHandler.readJsonFromUrl(url);
 		JSONObject lang = results.getJSONObject("langs");
-		for(String entry : lang.keySet()){
-		    langs.put(lang.getString(entry).toLowerCase(), entry.toLowerCase());
+		for (String entry : lang.keySet()) {
+			langs.put(lang.getString(entry).toLowerCase(), entry.toLowerCase());
 		}
 	}
 
@@ -67,11 +67,11 @@ public class InfinityBot {
 		return api;
 	}
 
-	public static ExecutorService getThreadPool(){
+	public static ExecutorService getThreadPool() {
 		return pool;
 	}
-	
-	public static HashMap<String, String> getLangs(){
+
+	public static HashMap<String, String> getLangs() {
 		return langs;
 	}
 

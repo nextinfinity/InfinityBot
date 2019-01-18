@@ -12,13 +12,13 @@ public class UserList implements Command {
 
 	@Override
 	public void execute(MessageReceivedEvent event, String[] args) {
-		if(args.length > 0){
+		if (args.length > 0) {
 			String name = ArgBuilder.buildString(args);
 			List<Guild> guilds = event.getJDA().getGuildsByName(name, true);
-			if(guilds != null && guilds.size() >= 1){
+			if (guilds != null && guilds.size() >= 1) {
 				Guild guild = guilds.get(0);
 				String text = "__**Users in " + guild.getName() + "**__";
-				for(Member mem: guild.getMembers()){
+				for (Member mem : guild.getMembers()) {
 					text = text + "\n" + mem.getEffectiveName();
 				}
 				event.getChannel().sendMessage(text).queue();

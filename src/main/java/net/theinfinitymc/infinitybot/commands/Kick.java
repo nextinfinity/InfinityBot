@@ -9,9 +9,9 @@ public class Kick implements Command {
 
 	@Override
 	public void execute(MessageReceivedEvent event, String[] args) {
-		if(event.getMember().hasPermission(Permission.KICK_MEMBERS)){
-			if(args.length > 0){
-				for(User user : event.getMessage().getMentionedUsers()){
+		if (event.getMember().hasPermission(Permission.KICK_MEMBERS)) {
+			if (args.length > 0) {
+				for (User user : event.getMessage().getMentionedUsers()) {
 					event.getGuild().getController().kick(user.getId()).queue();
 				}
 			}

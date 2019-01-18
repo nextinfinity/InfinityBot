@@ -17,24 +17,25 @@ class Status {
 			Game.playing("HuniePop"),
 			Game.watching("CornHub"),
 			Game.watching("inmc.pw/bot | .help"),
-			Game.watching("inmc.pw/bot | .help")};
+			Game.watching("inmc.pw/bot | .help")
+	};
 
-	private static int i;
-	private static int n = 2;
+	private static int index;
+	private static int interval = 2;
 
 	static void start() {
 		TIMER.purge();
-		i = new Random().nextInt(GAMES.length);
-		while (GAMES.length % n != 0) {
-			n++;
+		index = new Random().nextInt(GAMES.length);
+		while (GAMES.length % interval != 0) {
+			interval++;
 		}
 		TIMER.scheduleAtFixedRate(
 				new TimerTask() {
 					@Override
 					public void run() {
-						i += n;
-						if (i >= GAMES.length) i -= GAMES.length;
-						Game game = GAMES[i];
+						index += interval;
+						if (index >= GAMES.length) index -= GAMES.length;
+						Game game = GAMES[index];
 						InfinityBot.getAPI().getPresence().setGame(game);
 					}
 				}

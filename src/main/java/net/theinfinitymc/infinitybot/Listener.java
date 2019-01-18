@@ -71,6 +71,7 @@ public class Listener extends ListenerAdapter {
 		try {
 			e.getGuild().getTextChannels().get(0).sendMessage("Hello! I am Infinity Bot. To see what I can do, type '" + Config.getKey(e.getGuild()) + "help'").queue();
 		} catch (PermissionException ex) {
+			//TODO PermissionException
 		}
 		/*try {
 			JSONObject obj = new JSONObject().put("server_count", e.getJDA().getGuilds().size());

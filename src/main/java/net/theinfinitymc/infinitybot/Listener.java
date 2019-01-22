@@ -8,9 +8,7 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.theinfinitymc.infinitybot.commands.*;
 import net.theinfinitymc.infinitybot.utils.Config;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Listener extends ListenerAdapter {
 	private JDA jda;
@@ -25,15 +23,13 @@ public class Listener extends ListenerAdapter {
 
 	/**
 	 * Load all commands into a map.
-	 * I highly considered doing this with reflection, but decided that would be too error prone.
-	 * However, this implementation may still be changed to be less tedious.
 	 */
 	private void registerCommands() {
 		commands.put("admin", new Admin());
 		commands.put("anothaone", new AnothaOne());
 		commands.put("ban", new Ban());
 		commands.put("clear", new Clear());
-		commands.put("help", new Help());
+		commands.put("help", new Help(this));
 		commands.put("info", new Info());
 		commands.put("kick", new Kick());
 		commands.put("noot", new Noot());
@@ -49,6 +45,10 @@ public class Listener extends ListenerAdapter {
 		commands.put("translate", new Translate());
 		commands.put("volume", new Volume());
 		commands.put("youtube", new YouTube());
+	}
+
+	public Map<String, Command> getCommands() {
+		return commands;
 	}
 
 	@Override

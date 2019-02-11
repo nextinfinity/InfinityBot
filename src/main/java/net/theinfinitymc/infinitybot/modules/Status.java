@@ -16,8 +16,15 @@ public class Status {
             Game.listening("Red Cold River"),
             Game.playing("HuniePop"),
             Game.watching("CornHub"),
-            Game.watching("inmc.pw/bot | .help"),
-            Game.watching("inmc.pw/bot | .help")};
+            Game.watching("bot.nextinfinity.net"),
+            Game.watching("bot.nextinfinity.net"),
+            Game.watching("bot.nextinfinity.net"),
+            Game.watching("Type .help for help!"),
+            Game.playing("Counter-Strike: Global Offensive"),
+            Game.playing("Apex Legends"),
+            Game.listening("Periphery IV"),
+            Game.listening("Mr. Bill - Apophenia"),
+            Game.listening("YUNG MODEM")};
 
     private static int i;
     private static int n = 2;

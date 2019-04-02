@@ -12,6 +12,7 @@ import net.dean.jraw.util.Version;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.theinfinitymc.infinitybot.InfinityBot;
 import net.theinfinitymc.infinitybot.utils.ArgBuilder;
+import net.theinfinitymc.infinitybot.utils.Config;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,11 +20,10 @@ import java.util.Random;
 
 public class Reddit implements Command {
 
-	//TODO hide credentials
 	private final RedditClient reddit = new RedditClient(UserAgent.of("desktop",
 			"net.theinfinitymc.infinitybot",
 			"v" + Version.get().formatted(),
-			"NextInfinityBot"));
+			Config.getRedditUser()));
 
 	@Override
 	public void execute(MessageReceivedEvent event, String[] args) {
@@ -94,7 +94,11 @@ public class Reddit implements Command {
 	}
 
 	private void authenticate() {
-		Credentials credentials = Credentials.script("NextInfinityBot", "RNmc0118", "C3_2a1Y8-kRqnA", "OuWrCgqV5LRuuJUtG0izuk-oKBI");
+		String user = Config.getRedditUser();
+		String pass = Config.getRedditPass();
+		String id = Config.getRedditId();
+		String secret = Config.getRedditSecret();
+		Credentials credentials = Credentials.script(user, pass, id, secret);
 		OAuthData authData;
 		try {
 			authData = reddit.getOAuthHelper().easyAuth(credentials);

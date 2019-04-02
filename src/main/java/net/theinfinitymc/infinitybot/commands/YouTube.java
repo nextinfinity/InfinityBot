@@ -10,6 +10,7 @@ import com.google.api.services.youtube.model.SearchResult;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.theinfinitymc.infinitybot.InfinityBot;
 import net.theinfinitymc.infinitybot.utils.ArgBuilder;
+import net.theinfinitymc.infinitybot.utils.Config;
 
 import java.io.IOException;
 import java.util.List;
@@ -41,15 +42,15 @@ public class YouTube implements Command {
 	public String getDescription() {
 		return null;
 	}
+	String key = Config.getGoogleKey();
 
-	//TODO hide api key
 	public String search(String query) {
 
 		try {
 			// Define the API request for retrieving search results.
 			com.google.api.services.youtube.YouTube.Search.List search = youtube.search().list("id,snippet");
 
-			search.setKey("AIzaSyDIrtnnedRFrRqiO-L7bPBqvP_c0KDtrTM");
+			search.setKey(key);
 			search.setQ(query);
 
 			// Restrict the search results to only include videos. See:

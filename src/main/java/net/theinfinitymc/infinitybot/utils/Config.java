@@ -22,10 +22,14 @@ public class Config {
 	private static String key;
 	private static HashMap<String, String> guildkey = new HashMap<String, String>();
 	private static HashMap<String, List<String>> lists = new HashMap<String, List<String>>();
-	private static String clientid;
+	private static String soundcloudId;
 	private static String translatekey;
-	private static String googlekey;
-	private static String googlecse;
+	private static String googleKey;
+	private static String googleCSE;
+	private static String redditUser;
+	private static String redditPass;
+	private static String redditId;
+	private static String redditSecret;
 
 	public static void loadConfig() throws IOException {
 		File file = new File("config.yml");
@@ -40,10 +44,14 @@ public class Config {
 		adminid = map.get("admin-id");
 		token = map.get("token");
 		key = map.get("key");
-		clientid = map.get("soundcloud-client-id");
+		soundcloudId = map.get("soundcloud-client-id");
 		translatekey = map.get("translate-api-key");
-		googlekey = map.get("google-api-key");
-		googlecse = map.get("google-cse");
+		googleKey = map.get("google-api-key");
+		googleCSE = map.get("google-cse");
+		redditUser = map.get("reddit-username");
+		redditPass = map.get("reddit-password");
+		redditId = map.get("reddit-client-id");
+		redditSecret = map.get("reddit-secret");
 	}
 
 	public static void loadKeys() throws IOException {
@@ -140,8 +148,8 @@ public class Config {
 		return lists.get(g.getId() + "-" + name);
 	}
 
-	public static String getId() {
-		return clientid;
+	public static String getSoundcloudKey() {
+		return soundcloudId;
 	}
 
 	public static String getAdminId() {
@@ -167,11 +175,27 @@ public class Config {
 	}
 
 	public static String getGoogleKey() {
-		return googlekey;
+		return googleKey;
 	}
 
 	public static String getCSE() {
-		return googlecse;
+		return googleCSE;
+	}
+
+	public static String getRedditUser() {
+		return redditUser;
+	}
+
+	public static String getRedditPass() {
+		return redditPass;
+	}
+
+	public static String getRedditId() {
+		return redditId;
+	}
+
+	public static String getRedditSecret() {
+		return redditSecret;
 	}
 
 	public static void setKey(String newkey, Guild g) throws IOException {

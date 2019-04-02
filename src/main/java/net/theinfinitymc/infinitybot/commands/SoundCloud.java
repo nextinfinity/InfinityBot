@@ -3,6 +3,7 @@ package net.theinfinitymc.infinitybot.commands;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.theinfinitymc.infinitybot.InfinityBot;
 import net.theinfinitymc.infinitybot.utils.ArgBuilder;
+import net.theinfinitymc.infinitybot.utils.Config;
 import net.theinfinitymc.infinitybot.utils.JsonHandler;
 import org.json.JSONArray;
 
@@ -21,11 +22,11 @@ public class SoundCloud implements Command {
 		return null;
 	}
 
-	//TODO hide api key
 	private String search(String query) {
+		String key = Config.getSoundcloudKey();
 		try {
 			query = query.replaceAll(" ", "%20");
-			JSONArray results = JsonHandler.readJsonArrayFromUrl("https://api.soundcloud.com/track?client_id=35e00568851d1294e9816df13a80b987&q=" + query);
+			JSONArray results = JsonHandler.readJsonArrayFromUrl("https://api.soundcloud.com/track?client_id=" + key + "&q=" + query);
 			return results.getJSONObject(0).getString("permalink_url");
 		} catch (Exception e) {
 			e.printStackTrace();

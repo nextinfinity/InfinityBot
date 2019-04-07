@@ -33,7 +33,7 @@ public class Translate implements Command {
 		return null;
 	}
 
-	public String translate(String s, String l) throws JSONException, IOException {
+	private String translate(String s, String l) throws JSONException, IOException {
 		String query = format(s);
 		String lang;
 		if (InfinityBot.getLangs().containsKey(l)) {
@@ -47,15 +47,15 @@ public class Translate implements Command {
 	}
 
 	private String format(String s) {
-		String formatted = "";
+		StringBuilder formatted = new StringBuilder();
 		String[] substrings = s.split(" ");
 		for (String sub : substrings) {
 			if (!sub.equalsIgnoreCase(substrings[0])) {
-				formatted = formatted + "%20";
+				formatted.append("%20");
 			}
-			formatted = formatted + sub;
+			formatted.append(sub);
 		}
-		return formatted;
+		return formatted.toString();
 	}
 
 }

@@ -26,11 +26,11 @@ public class Stats implements Command {
 			for (User u : event.getMessage().getMentionedUsers()) {
 				event.getChannel().sendMessage(new MessageBuilder()
 						.append("Stats for ").append(u)
-						.append("\nUsername: " + u.getName())
-						.append("\nID: " + u.getId())
-						.append("\nDiscriminator: " + u.getDiscriminator())
-						.append("\nAvatar URL: " + u.getAvatarUrl())
-						.append("\nServers Shared: " + calculateSharedServers(u))
+						.append("\nUsername: ").append(u.getName())
+						.append("\nID: ").append(u.getId())
+						.append("\nDiscriminator: ").append(u.getDiscriminator())
+						.append("\nAvatar URL: ").append(u.getAvatarUrl())
+						.append("\nServers Shared: ").append(String.valueOf(calculateSharedServers(u)))
 						.build()).queue();
 			}
 		} else {
@@ -56,15 +56,17 @@ public class Stats implements Command {
 		Integer n = 0;
 		for (Guild g : jda.getGuilds()) {
 			for (Member m : g.getMembers()) {
-				if (m.getUser() == u) n++;
-				break;
+				if (m.getUser() == u) {
+					n++;
+					break;
+				}
 			}
 		}
 		return n;
 	}
 
 	private Integer calculateUniqueUsers() {
-		ArrayList<String> users = new ArrayList<String>();
+		ArrayList<String> users = new ArrayList<>();
 		for (Guild g : jda.getGuilds()) {
 			for (Member m : g.getMembers()) {
 				User u = m.getUser();

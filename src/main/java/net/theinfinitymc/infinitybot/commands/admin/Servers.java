@@ -8,11 +8,11 @@ public class Servers implements Command {
 
 	@Override
 	public void execute(MessageReceivedEvent event, String[] args) {
-		String text = "__**Joined Servers**__";
+		StringBuilder text = new StringBuilder("__**Joined Servers**__");
 		for (Guild g : event.getJDA().getGuilds()) {
-			text = text + "\n" + g.getName();
+			text.append("\n").append(g.getName());
 		}
-		event.getChannel().sendMessage(text).queue();
+		event.getChannel().sendMessage(text.toString()).queue();
 	}
 
 	@Override

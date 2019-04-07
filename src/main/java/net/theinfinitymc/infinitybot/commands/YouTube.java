@@ -1,8 +1,6 @@
 package net.theinfinitymc.infinitybot.commands;
 
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.youtube.model.SearchListResponse;
@@ -18,15 +16,14 @@ import java.util.List;
 public class YouTube implements Command {
 
 	private static com.google.api.services.youtube.YouTube youtube;
+	private String key = Config.getGoogleKey();
 
 	public YouTube() {
 		// This object is used to make YouTube Data API requests. The last
 		// argument is required, but since we don't need anything
 		// initialized when the HttpRequest is initialized, we override
 		// the interface and provide a no-op function.
-		youtube = new com.google.api.services.youtube.YouTube.Builder(new NetHttpTransport(), new JacksonFactory(), new HttpRequestInitializer() {
-			public void initialize(HttpRequest request) throws IOException {
-			}
+		youtube = new com.google.api.services.youtube.YouTube.Builder(new NetHttpTransport(), new JacksonFactory(), request -> {
 		}).setApplicationName("infinitybot-youtube-search").build();
 	}
 
@@ -42,10 +39,8 @@ public class YouTube implements Command {
 	public String getDescription() {
 		return null;
 	}
-	String key = Config.getGoogleKey();
 
-	public String search(String query) {
-
+	private String search(String query) {
 		try {
 			// Define the API request for retrieving search results.
 			com.google.api.services.youtube.YouTube.Search.List search = youtube.search().list("id,snippet");

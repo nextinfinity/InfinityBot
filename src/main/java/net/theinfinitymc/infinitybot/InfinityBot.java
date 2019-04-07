@@ -26,7 +26,6 @@ public class InfinityBot {
 		try {
 			Config.loadConfig();
 			Config.loadKeys();
-			Config.loadLists();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -45,7 +44,7 @@ public class InfinityBot {
 			e.printStackTrace();
 		}
 		try {
-			initLangs("en");
+			initLangs();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -54,8 +53,8 @@ public class InfinityBot {
 		audio = new Audio();
 	}
 
-	private static void initLangs(String l) throws JSONException, IOException {
-		String url = ("https://translate.yandex.net/api/v1.5/tr.json/getLangs?key=" + Config.getTranslateKey() + "&ui=" + l);
+	private static void initLangs() throws JSONException, IOException {
+		String url = ("https://translate.yandex.net/api/v1.5/tr.json/getLangs?key=" + Config.getTranslateKey() + "&ui=en");
 		JSONObject results = JsonHandler.readJsonFromUrl(url);
 		JSONObject lang = results.getJSONObject("langs");
 		for (String entry : lang.keySet()) {
@@ -63,7 +62,7 @@ public class InfinityBot {
 		}
 	}
 
-	public static JDA getAPI() {
+	static JDA getAPI() {
 		return api;
 	}
 

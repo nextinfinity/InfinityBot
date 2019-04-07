@@ -1,6 +1,5 @@
 package net.theinfinitymc.infinitybot.commands;
 
-import net.dean.jraw.models.Message;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;

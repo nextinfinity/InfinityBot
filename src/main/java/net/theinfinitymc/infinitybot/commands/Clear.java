@@ -25,10 +25,11 @@ public class Clear implements Command {
 		}
 	}
 
-	public void delete(Message m) {
+	private void delete(Message m) {
 		try {
 			m.delete().queue();
 		} catch (Exception e) {
+			//Silently fail if the message can't be deleted, don't want to clog up chat more
 		}
 	}
 

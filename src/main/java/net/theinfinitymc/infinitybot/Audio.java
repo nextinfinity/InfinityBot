@@ -11,7 +11,6 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
-import net.theinfinitymc.infinitybot.AudioListener;
 import net.theinfinitymc.infinitybot.utils.AudioPlayerSendHandler;
 
 import java.util.HashMap;
@@ -75,7 +74,7 @@ public class Audio {
 			}
 			load(song, guild, channel);
 		}else{
-			channel.sendMessage("You must be in a voice channel to play a song!").queue();;
+			channel.sendMessage("You must be in a voice channel to play a song!").queue();
 		}
 	}
 

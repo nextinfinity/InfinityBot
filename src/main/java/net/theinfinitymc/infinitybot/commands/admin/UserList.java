@@ -17,11 +17,11 @@ public class UserList implements Command {
 			List<Guild> guilds = event.getJDA().getGuildsByName(name, true);
 			if (guilds != null && guilds.size() >= 1) {
 				Guild guild = guilds.get(0);
-				String text = "__**Users in " + guild.getName() + "**__";
+				StringBuilder text = new StringBuilder("__**Users in " + guild.getName() + "**__");
 				for (Member mem : guild.getMembers()) {
-					text = text + "\n" + mem.getEffectiveName();
+					text.append("\n").append(mem.getEffectiveName());
 				}
-				event.getChannel().sendMessage(text).queue();
+				event.getChannel().sendMessage(text.toString()).queue();
 			}
 		}
 	}

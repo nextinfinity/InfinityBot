@@ -27,7 +27,7 @@ public class AudioListener extends AudioEventAdapter {
 		}
 	}
 
-	public void playNext() {
+	void playNext() {
 		if (!p.startTrack(q.poll(), false)) {
 			p.stopTrack();
 			disconnect();
@@ -77,11 +77,11 @@ public class AudioListener extends AudioEventAdapter {
 		c.sendMessage("pause").queue();
 	}
 
-	public void disconnect() {
+	void disconnect() {
 		InfinityBot.getThreadPool().execute(() -> c.getGuild().getAudioManager().closeAudioConnection());
 	}
 
-	public boolean hasNext() {
+	boolean hasNext() {
 		return !q.isEmpty();
 	}
 }

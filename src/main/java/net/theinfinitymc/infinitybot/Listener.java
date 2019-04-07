@@ -73,14 +73,6 @@ public class Listener extends ListenerAdapter {
 		} catch (PermissionException ex) {
 			//TODO PermissionException
 		}
-		/*try {
-			JSONObject obj = new JSONObject().put("server_count", e.getJDA().getGuilds().size());
-			Unirest.post("https://bots.discord.pw/api/bots/190953977129598976/stats")
-					.header("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI4MTEzMTg2NDI5NDY5NDkxMiIsInJhbmQiOjU0NSwiaWF0IjoxNDgzODIwMjM0fQ.c0p0zwJuwlug9okuxT0D07FQnwoLPzmoGqnfedSLxRY")
-					.body(obj).asJson();
-		} catch (UnirestException e1) {
-			e1.printStackTrace();
-		}*/
 	}
 
 }

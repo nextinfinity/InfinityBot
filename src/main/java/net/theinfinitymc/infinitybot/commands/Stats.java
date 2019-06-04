@@ -49,7 +49,7 @@ public class Stats implements Command {
 
 	@Override
 	public String getDescription() {
-		return null;
+		return "Displays stats for all mentioned users.";
 	}
 
 	private Integer calculateSharedServers(User u) {

@@ -13,7 +13,7 @@ public class Noot implements Command {
 
 	@Override
 	public String getDescription() {
-		return null;
+		return "NOOT NOOT";
 	}
 
 }

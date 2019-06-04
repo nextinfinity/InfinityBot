@@ -18,7 +18,7 @@ public class Clear implements Command {
 				int i = Integer.parseInt(args[0]);
 				if (i > 0) amount = i;
 			}
-			List<Message> list = new MessageHistory(event.getChannel()).retrievePast(amount).complete();
+			List<Message> list = new MessageHistory(event.getChannel()).retrievePast(amount + 1).complete();
 			for (Message m : list) {
 				delete(m);
 			}
@@ -35,7 +35,7 @@ public class Clear implements Command {
 
 	@Override
 	public String getDescription() {
-		return null;
+		return "Delete the specified number of messages.";
 	}
 
 }

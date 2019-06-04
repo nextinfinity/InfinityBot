@@ -37,7 +37,7 @@ public class YouTube implements Command {
 
 	@Override
 	public String getDescription() {
-		return null;
+		return "Searches YouTube and plays the first result.";
 	}
 
 	private String search(String query) {

@@ -13,7 +13,7 @@ public class AnothaOne implements Command {
 
 	@Override
 	public String getDescription() {
-		return null;
+		return "ANOTHA ONE";
 	}
 
 }

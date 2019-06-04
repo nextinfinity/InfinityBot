@@ -19,7 +19,7 @@ public class SoundCloud implements Command {
 
 	@Override
 	public String getDescription() {
-		return null;
+		return "Searches SoundCloud and plays the first result.";
 	}
 
 	private String search(String query) {

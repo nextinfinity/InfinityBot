@@ -61,7 +61,7 @@ public class Reddit implements Command {
 
 	@Override
 	public String getDescription() {
-		return null;
+		return "Gets a post from the specified subreddit.";
 	}
 
 	private String subredditSearch(String sr, String sort, String time, Integer amount) {

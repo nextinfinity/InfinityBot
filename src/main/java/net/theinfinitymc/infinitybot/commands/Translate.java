@@ -30,7 +30,7 @@ public class Translate implements Command {
 
 	@Override
 	public String getDescription() {
-		return null;
+		return "Translates text to specified language.";
 	}
 
 	private String translate(String s, String l) throws JSONException, IOException {

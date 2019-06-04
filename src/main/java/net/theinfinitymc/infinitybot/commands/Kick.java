@@ -19,7 +19,7 @@ public class Kick implements Command {
 
 	@Override
 	public String getDescription() {
-		return null;
+		return "Kicks any mentioned user(s) from the server.";
 	}
 
 }

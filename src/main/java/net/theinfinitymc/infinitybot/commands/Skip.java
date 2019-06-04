@@ -18,7 +18,7 @@ public class Skip implements Command {
 
 	@Override
 	public String getDescription() {
-		return null;
+		return "Skips the current audio, if it is playing.";
 	}
 
 }

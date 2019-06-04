@@ -12,7 +12,7 @@ public class Stop implements Command {
 
 	@Override
 	public String getDescription() {
-		return null;
+		return "Stops audio, if it is playing.";
 	}
 
 }

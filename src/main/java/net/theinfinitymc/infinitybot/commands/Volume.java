@@ -22,7 +22,7 @@ public class Volume implements Command {
 
 	@Override
 	public String getDescription() {
-		return null;
+		return "Sets the volume of audio. Number between 0 and 100.";
 	}
 
 }

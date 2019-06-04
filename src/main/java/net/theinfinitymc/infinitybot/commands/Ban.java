@@ -19,7 +19,7 @@ public class Ban implements Command {
 
 	@Override
 	public String getDescription() {
-		return null;
+		return "Bans any mentioned user(s) from the server.";
 	}
 
 }

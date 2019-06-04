@@ -11,6 +11,6 @@ public class Ping implements Command {
 
 	@Override
 	public String getDescription() {
-		return null;
+		return "Like Pong, but a text game.";
 	}
 }

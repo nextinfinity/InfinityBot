@@ -16,7 +16,7 @@ public class Play implements Command {
 
 	@Override
 	public String getDescription() {
-		return null;
+		return "Plays audio from the specified link. Must be in voice chat.";
 	}
 
 }

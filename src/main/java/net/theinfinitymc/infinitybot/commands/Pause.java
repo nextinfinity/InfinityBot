@@ -12,7 +12,7 @@ public class Pause implements Command {
 
 	@Override
 	public String getDescription() {
-		return null;
+		return "Pause/unpause the audio, if any is playing.";
 	}
 
 }

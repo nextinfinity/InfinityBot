@@ -21,7 +21,7 @@ public class SetKey implements Command {
 
 	@Override
 	public String getDescription() {
-		return null;
+		return "Sets the key for commands for the server. Default: .";
 	}
 
 }

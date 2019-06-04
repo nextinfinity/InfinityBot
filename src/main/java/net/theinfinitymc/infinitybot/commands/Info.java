@@ -17,7 +17,7 @@ public class Info implements Command {
 
 	@Override
 	public String getDescription() {
-		return null;
+		return "Displays basic bot info.";
 	}
 
 }

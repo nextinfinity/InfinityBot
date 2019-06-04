@@ -15,4 +15,4 @@ include 'api'
 include 'services:webservice'
 */
 
-rootProject.name = 'Infinity Bot'
+rootProject.name = 'InfinityBot'

@@ -28,11 +28,11 @@ public class Config {
 	public static final String DIR = "data";
 
 	public static void loadConfig() throws IOException {
-		File file = new File(DIR + File.pathSeparator + "config.yml");
+		File file = new File(DIR + File.separator + "config.yml");
 		if (!file.exists()) {
 			file.createNewFile();
 		}
-		FileReader fr = new FileReader(DIR + File.pathSeparator + "config.yml");
+		FileReader fr = new FileReader(DIR + File.separator + "config.yml");
 		YamlReader reader = new YamlReader(fr);
 		Map<String, String> map = (Map<String, String>) reader.read();
 		reader.close();
@@ -51,11 +51,11 @@ public class Config {
 	}
 
 	public static void loadKeys() throws IOException {
-		File file = new File(DIR + File.pathSeparator + "keys.yml");
+		File file = new File(DIR + File.separator + "keys.yml");
 		if (!file.exists()) {
 			file.createNewFile();
 		}
-		FileReader fr = new FileReader(DIR + File.pathSeparator + "keys.yml");
+		FileReader fr = new FileReader(DIR + File.separator + "keys.yml");
 		YamlReader reader = new YamlReader(fr);
 		Map<String, String> map = (Map<String, String>) reader.read();
 		reader.close();
@@ -113,12 +113,12 @@ public class Config {
 	}
 
 	public static void setKey(String newkey, Guild g) throws IOException {
-		FileReader fr = new FileReader(DIR + File.pathSeparator + "keys.yml");
+		FileReader fr = new FileReader(DIR + File.separator + "keys.yml");
 		YamlReader reader = new YamlReader(fr);
 		Map<String, String> map = (Map<String, String>) reader.read();
 		reader.close();
 		map.put(g.getId(), newkey);
-		FileWriter fw = new FileWriter(DIR + File.pathSeparator + "keys.yml");
+		FileWriter fw = new FileWriter(DIR + File.separator + "keys.yml");
 		YamlWriter writer = new YamlWriter(fw);
 		writer.write(map);
 		writer.close();

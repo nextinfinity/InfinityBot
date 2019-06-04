@@ -24,7 +24,8 @@ public class Config {
 	private static String redditPass;
 	private static String redditId;
 	private static String redditSecret;
-	private static final String DIR = "config";
+
+	public static final String DIR = "data";
 
 	public static void loadConfig() throws IOException {
 		File file = new File(DIR + File.pathSeparator + "config.yml");

@@ -30,9 +30,9 @@ dependencies {
 }
 
 
-def versionFile = 'src/main/java/net/theinfinitymc/infinitybot/Listener.java'
+def versionFile = 'src/main/java/net/theinfinitymc/infinitybot/commands/Info.java'
 def tempDir = 'build/tmp/sourcesCache'
-def versionFileName = 'Listener.java'
+def versionFileName = 'Info.java'
 
 compileJava.doFirst {
     copy {

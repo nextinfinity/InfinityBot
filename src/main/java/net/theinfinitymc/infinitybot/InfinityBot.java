@@ -37,19 +37,15 @@ public class InfinityBot {
 		}
 
 		try {
-			api = new JDABuilder(AccountType.BOT).setToken(token).setAudioSendFactory(new NativeAudioSendFactory()).buildAsync();
+			api = new JDABuilder(AccountType.BOT).setToken(token).setAudioSendFactory(new NativeAudioSendFactory()).build();
 			api.addEventListener(new Listener(api));
 			Status.start();
-		} catch (LoginException | IllegalArgumentException e) {
-			e.printStackTrace();
-		}
-		try {
 			initLangs();
-		} catch (IOException e) {
+		} catch (LoginException | IllegalArgumentException | IOException e) {
 			e.printStackTrace();
 		}
-		pool = Executors.newCachedThreadPool();
 
+		pool = Executors.newCachedThreadPool();
 		audio = new Audio();
 	}
 

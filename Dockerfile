@@ -1,10 +1,10 @@
-FROM gradle:jdk10 as builder
+FROM gradle:jdk11 as builder
 
 COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
 RUN gradle shadowJar
 
-FROM anapsix/alpine-java:10
+FROM openjdk:11
 COPY --from=builder /home/gradle/src/infinitybot/build/distributions/infinitybot.jar ./InfinityBot.jar
 MAINTAINER NextInfinity
 

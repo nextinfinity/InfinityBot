@@ -1,4 +1,4 @@
-package net.theinfinitymc.infinitybot.modules;
+package net.theinfinitymc.infinitybot;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
@@ -10,7 +10,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.TextChannel;
-import net.theinfinitymc.infinitybot.AudioListener;
+import net.dv8tion.jda.core.entities.User;
 import net.theinfinitymc.infinitybot.utils.AudioPlayerSendHandler;
 
 import java.util.HashMap;
@@ -19,14 +19,14 @@ public class Audio {
 	private AudioPlayerManager playerManager;
 	private HashMap<Guild, AudioListener> listeners = new HashMap<>();
 	
-	public Audio(){
+	Audio(){
 		playerManager = new DefaultAudioPlayerManager();
 		AudioSourceManagers.registerRemoteSources(playerManager);
 		playerManager.setFrameBufferDuration(10000);
 		playerManager.setTrackStuckThreshold(5000);
 	}
 	
-	public void load(String link, Guild g, TextChannel c){
+	private void load(String link, Guild g, TextChannel c){
 		if(getPlayer(g) == null) createPlayer(g, c);
 		playerManager.loadItem(link, new AudioLoadResultHandler() {
 			  @Override
@@ -60,7 +60,24 @@ public class Audio {
 			  }
 			});
 	}
-	
+
+	public void addToQueue(String song, Guild guild, TextChannel channel, User user){
+		if(guild.getMember(user).getVoiceState().inVoiceChannel()){
+			if(!guild.getAudioManager().isConnected()){
+				try{
+					guild.getAudioManager().openAudioConnection(guild.getMember(user).getVoiceState().getChannel());
+				}catch(Exception ex){
+					guild.getAudioManager().closeAudioConnection();
+					channel.sendMessage("Error joining voice channel!").queue();
+					return;
+				}
+			}
+			load(song, guild, channel);
+		}else{
+			channel.sendMessage("You must be in a voice channel to play a song!").queue();
+		}
+	}
+
 	public void setVolume(Integer vol, Guild g){
 		if(isPlaying(g)) getPlayer(g).setVolume(vol);
 	}

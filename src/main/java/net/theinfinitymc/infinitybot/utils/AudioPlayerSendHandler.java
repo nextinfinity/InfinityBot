@@ -30,7 +30,7 @@ public class AudioPlayerSendHandler implements AudioSendHandler {
 		return true;
 	}
 
-	public AudioPlayer getPlayer(){
+	public AudioPlayer getPlayer() {
 		return audioPlayer;
 	}
 

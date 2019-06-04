@@ -20,46 +20,48 @@ public class Config {
 	private static String soundcloudId;
 	private static String translatekey;
 	private static String googleKey;
-	private static String googleCSE;
 	private static String redditUser;
 	private static String redditPass;
 	private static String redditId;
 	private static String redditSecret;
+	private static final String DIR = "config";
 
 	public static void loadConfig() throws IOException {
-		File file = new File("config.yml");
+		File file = new File(DIR + File.pathSeparator + "config.yml");
 		if (!file.exists()) {
 			file.createNewFile();
 		}
-		FileReader fr = new FileReader("config.yml");
+		FileReader fr = new FileReader(DIR + File.pathSeparator + "config.yml");
 		YamlReader reader = new YamlReader(fr);
-		@SuppressWarnings("unchecked")
 		Map<String, String> map = (Map<String, String>) reader.read();
 		reader.close();
-		adminid = map.get("admin-id");
-		token = map.get("token");
-		key = map.get("key");
-		soundcloudId = map.get("soundcloud-client-id");
-		translatekey = map.get("translate-api-key");
-		googleKey = map.get("google-api-key");
-		googleCSE = map.get("google-cse");
-		redditUser = map.get("reddit-username");
-		redditPass = map.get("reddit-password");
-		redditId = map.get("reddit-client-id");
-		redditSecret = map.get("reddit-secret");
+		if (map != null) {
+			token = map.get("token");
+			key = map.get("key");
+			adminid = map.get("admin-id");
+			soundcloudId = map.get("soundcloud-client-id");
+			translatekey = map.get("translate-api-key");
+			googleKey = map.get("google-api-key");
+			redditUser = map.get("reddit-username");
+			redditPass = map.get("reddit-password");
+			redditId = map.get("reddit-client-id");
+			redditSecret = map.get("reddit-secret");
+		}
 	}
 
 	public static void loadKeys() throws IOException {
-		File file = new File("keys.yml");
+		File file = new File(DIR + File.pathSeparator + "keys.yml");
 		if (!file.exists()) {
 			file.createNewFile();
 		}
-		FileReader fr = new FileReader("keys.yml");
+		FileReader fr = new FileReader(DIR + File.pathSeparator + "keys.yml");
 		YamlReader reader = new YamlReader(fr);
 		Map<String, String> map = (Map<String, String>) reader.read();
 		reader.close();
-		for (String guild : map.keySet()) {
-			guildkey.put(guild, map.get(guild));
+		if (map != null) {
+			for (String guild : map.keySet()) {
+				guildkey.put(guild, map.get(guild));
+			}
 		}
 	}
 
@@ -93,10 +95,6 @@ public class Config {
 		return googleKey;
 	}
 
-	public static String getCSE() {
-		return googleCSE;
-	}
-
 	public static String getRedditUser() {
 		return redditUser;
 	}
@@ -114,13 +112,12 @@ public class Config {
 	}
 
 	public static void setKey(String newkey, Guild g) throws IOException {
-		FileReader fr = new FileReader("keys.yml");
+		FileReader fr = new FileReader(DIR + File.pathSeparator + "keys.yml");
 		YamlReader reader = new YamlReader(fr);
-		@SuppressWarnings("unchecked")
 		Map<String, String> map = (Map<String, String>) reader.read();
 		reader.close();
 		map.put(g.getId(), newkey);
-		FileWriter fw = new FileWriter("keys.yml");
+		FileWriter fw = new FileWriter(DIR + File.pathSeparator + "keys.yml");
 		YamlWriter writer = new YamlWriter(fw);
 		writer.write(map);
 		writer.close();

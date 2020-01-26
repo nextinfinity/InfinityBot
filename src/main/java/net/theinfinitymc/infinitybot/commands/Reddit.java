@@ -9,7 +9,7 @@ import net.dean.jraw.models.Submission;
 import net.dean.jraw.paginators.SubmissionSearchPaginator;
 import net.dean.jraw.paginators.TimePeriod;
 import net.dean.jraw.util.Version;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.theinfinitymc.infinitybot.InfinityBot;
 import net.theinfinitymc.infinitybot.utils.ArgBuilder;
 import net.theinfinitymc.infinitybot.utils.Config;

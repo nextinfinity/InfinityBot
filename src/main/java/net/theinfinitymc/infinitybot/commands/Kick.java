@@ -1,8 +1,8 @@
 package net.theinfinitymc.infinitybot.commands;
 
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class Kick implements Command {
 
@@ -11,7 +11,7 @@ public class Kick implements Command {
 		if (event.getMember().hasPermission(Permission.KICK_MEMBERS)) {
 			if (args.length > 0) {
 				for (User user : event.getMessage().getMentionedUsers()) {
-					event.getGuild().getController().kick(user.getId()).queue();
+					event.getGuild().kick(user.getId()).queue();
 				}
 			}
 		}

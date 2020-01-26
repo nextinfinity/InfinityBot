@@ -2,7 +2,7 @@ package net.theinfinitymc.infinitybot.utils;
 
 import com.esotericsoftware.yamlbeans.YamlReader;
 import com.esotericsoftware.yamlbeans.YamlWriter;
-import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.api.entities.Guild;
 
 import java.io.File;
 import java.io.FileReader;

@@ -1,6 +1,6 @@
 package net.theinfinitymc.infinitybot;
 
-import net.dv8tion.jda.core.entities.Game;
+import net.dv8tion.jda.api.entities.Activity;
 
 import java.util.Random;
 import java.util.Timer;
@@ -8,22 +8,22 @@ import java.util.TimerTask;
 
 class Status {
     private final static Timer TIMER = new Timer();
-    private final static Game[] GAMES = {
-            Game.listening("Franky Nuts - All I Want"),
-            Game.listening("Kayzo - Never Alone"),
-            Game.listening("Periphery - Alpha"),
-            Game.listening("Red Cold River"),
-            Game.playing("HuniePop"),
-            Game.watching("CornHub"),
-            Game.watching("bot.nextinfinity.net"),
-            Game.watching("bot.nextinfinity.net"),
-            Game.watching("bot.nextinfinity.net"),
-            Game.watching("Type .help for help!"),
-            Game.playing("Counter-Strike: Global Offensive"),
-            Game.playing("Apex Legends"),
-            Game.listening("Periphery IV"),
-            Game.listening("Mr. Bill - Apophenia"),
-            Game.listening("YUNG MODEM")};
+    private final static Activity[] GAMES = {
+            Activity.listening("Franky Nuts - All I Want"),
+            Activity.listening("Kayzo - Never Alone"),
+            Activity.listening("Periphery - Alpha"),
+            Activity.listening("Red Cold River"),
+            Activity.playing("HuniePop"),
+            Activity.watching("CornHub"),
+            Activity.watching("bot.nextinfinity.net"),
+            Activity.watching("bot.nextinfinity.net"),
+            Activity.watching("bot.nextinfinity.net"),
+            Activity.watching("Type .help for help!"),
+            Activity.playing("Counter-Strike: Global Offensive"),
+            Activity.playing("Apex Legends"),
+            Activity.listening("Periphery IV"),
+            Activity.listening("Mr. Bill - Apophenia"),
+            Activity.listening("YUNG MODEM")};
 
     private static int index;
     private static int interval = 2;
@@ -40,8 +40,8 @@ class Status {
                     public void run() {
                         index += interval;
                         if (index >= GAMES.length) index -= GAMES.length;
-                        Game game = GAMES[index];
-                        InfinityBot.getAPI().getPresence().setGame(game);
+                        Activity game = GAMES[index];
+                        InfinityBot.getAPI().getPresence().setActivity(game);
                     }
                 }
                 , 0, 5 * 60 * 1000);

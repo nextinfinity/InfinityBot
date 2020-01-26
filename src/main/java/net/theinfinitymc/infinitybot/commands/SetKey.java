@@ -1,7 +1,7 @@
 package net.theinfinitymc.infinitybot.commands;
 
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.theinfinitymc.infinitybot.utils.Config;
 
 public class SetKey implements Command {

@@ -1,5 +1,6 @@
 plugins {
   id "com.github.johnrengelman.shadow" version "5.0.0"
+  id "com.sedmelluq.jdaction" version "1.0.2"
 }
 
 apply plugin: 'java'
@@ -20,7 +21,7 @@ repositories {
 dependencies {
     compile group: 'net.dv8tion', name: 'JDA', version: jdaVersion
     compile group: 'com.sedmelluq', name: 'lavaplayer', version: lavaVersion
-    compile group: 'com.sedmelluq', name: 'jda-nas', version: '1.0.6'
+    compile group: 'com.sedmelluq', name: 'jda-nas', version: nasVersion
     compile group: 'com.google.apis', name: 'google-api-services-youtube', version: 'v3-rev204-1.23.0'
     compile group: 'net.dean.jraw', name: 'JRAW', version: '0.9.0'
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.10.0'

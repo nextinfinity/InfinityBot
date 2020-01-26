@@ -1,16 +1,16 @@
 package net.theinfinitymc.infinitybot.commands;
 
-import net.dv8tion.jda.core.MessageBuilder;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class Info implements Command {
 
 	@Override
 	public void execute(MessageReceivedEvent event, String[] args) {
 		Message text = new MessageBuilder().append("__**Infinity Bot**__"
-				+ "\n" + "Version: " + "@botVersion@"
-				+ "\n" + "API: JDA v" + "@jdaVersion@" + " w/ LavaPlayer v" + "@lavaVersion@"
+				+ "\n" + "Version: " + "2.1"
+				+ "\n" + "API: JDA v" + "4.1.1_101" + " w/ LavaPlayer v" + "1.3.33"
 				+ "\n" + "Creator: NextInfinity").build();
 		event.getChannel().sendMessage(text).queue();
 	}

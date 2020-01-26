@@ -1,6 +1,6 @@
 package net.theinfinitymc.infinitybot.commands;
 
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.theinfinitymc.infinitybot.Listener;
 
 import java.util.Map;

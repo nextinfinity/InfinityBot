@@ -1,7 +1,7 @@
 package net.theinfinitymc.infinitybot.commands.admin;
 
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.theinfinitymc.infinitybot.commands.Command;
 import net.theinfinitymc.infinitybot.utils.ArgBuilder;
 

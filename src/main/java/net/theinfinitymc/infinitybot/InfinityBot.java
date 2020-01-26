@@ -1,9 +1,9 @@
 package net.theinfinitymc.infinitybot;
 
 import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
-import net.dv8tion.jda.core.AccountType;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDABuilder;
+import net.dv8tion.jda.api.AccountType;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
 import net.theinfinitymc.infinitybot.utils.Config;
 import net.theinfinitymc.infinitybot.utils.JsonHandler;
 import org.json.JSONException;

@@ -25,7 +25,6 @@ public class Listener extends ListenerAdapter {
 	 * Load all commands into a map.
 	 */
 	private void registerCommands() {
-		commands.put("admin", new Admin());
 		commands.put("anothaone", new AnothaOne());
 		commands.put("ban", new Ban());
 		commands.put("clear", new Clear());

@@ -9,21 +9,10 @@ import java.util.TimerTask;
 class Status {
     private final static Timer TIMER = new Timer();
     private final static Activity[] GAMES = {
-            Activity.listening("Franky Nuts - All I Want"),
-            Activity.listening("Kayzo - Never Alone"),
-            Activity.listening("Periphery - Alpha"),
-            Activity.listening("Red Cold River"),
-            Activity.playing("HuniePop"),
-            Activity.watching("CornHub"),
-            Activity.watching("bot.nextinfinity.net"),
-            Activity.watching("bot.nextinfinity.net"),
             Activity.watching("bot.nextinfinity.net"),
             Activity.watching("Type .help for help!"),
-            Activity.playing("Counter-Strike: Global Offensive"),
-            Activity.playing("Apex Legends"),
-            Activity.listening("Periphery IV"),
-            Activity.listening("Mr. Bill - Apophenia"),
-            Activity.listening("YUNG MODEM")};
+            Activity.watching("discord.gg/PvmhyMs for support")
+    };
 
     private static int index;
     private static int interval = 2;

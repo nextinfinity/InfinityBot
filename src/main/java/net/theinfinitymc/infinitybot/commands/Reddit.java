@@ -82,7 +82,7 @@ public class Reddit implements Command {
 			period = TimePeriod.valueOf(time);
 		}
 		sp.setTimePeriod(period);
-		Integer limit = 10;
+		int limit = 10;
 		if (amount != null) {
 			limit = amount;
 		}

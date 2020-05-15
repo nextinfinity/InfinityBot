@@ -34,11 +34,11 @@ public class Stats implements Command {
 						.build()).queue();
 			}
 		} else {
-			Long time = System.currentTimeMillis() - this.start;
-			Long days = TimeUnit.MILLISECONDS.toDays(time);
-			Long hours = TimeUnit.MILLISECONDS.toHours(time) - days * 24;
-			Long min = TimeUnit.MILLISECONDS.toMinutes(time) - days * 1440 - hours * 60;
-			Long sec = TimeUnit.MILLISECONDS.toSeconds(time) - days * 86400 - hours * 3600 - min * 60;
+			long time = System.currentTimeMillis() - this.start;
+			long days = TimeUnit.MILLISECONDS.toDays(time);
+			long hours = TimeUnit.MILLISECONDS.toHours(time) - days * 24;
+			long min = TimeUnit.MILLISECONDS.toMinutes(time) - days * 1440 - hours * 60;
+			long sec = TimeUnit.MILLISECONDS.toSeconds(time) - days * 86400 - hours * 3600 - min * 60;
 			String fTime = days + " days " + hours + ":" + min + ":" + sec;
 			event.getChannel().sendMessage("Stats for " + event.getJDA().getSelfUser().getAsMention() +
 					"\nServers Joined: " + event.getJDA().getGuilds().size() +

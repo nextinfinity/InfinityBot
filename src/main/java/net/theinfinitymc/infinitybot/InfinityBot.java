@@ -4,6 +4,7 @@ import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.theinfinitymc.infinitybot.utils.Config;
 import net.theinfinitymc.infinitybot.utils.JsonHandler;
 import org.json.JSONException;
@@ -11,6 +12,8 @@ import org.json.JSONObject;
 
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -37,8 +40,11 @@ public class InfinityBot {
 		}
 
 		try {
-			api = new JDABuilder(AccountType.BOT).setToken(token).setAudioSendFactory(new NativeAudioSendFactory()).build();
-			api.addEventListener(new Listener(api));
+
+			api = JDABuilder.createDefault(token, InfinityBot.getIntents())
+					.addEventListeners(new Listener(api))
+					.setAudioSendFactory(new NativeAudioSendFactory())
+					.build();
 			Status.start();
 			initLangs();
 		} catch (LoginException | IllegalArgumentException | IOException e) {
@@ -47,6 +53,21 @@ public class InfinityBot {
 
 		pool = Executors.newCachedThreadPool();
 		audio = new Audio();
+	}
+
+	private static Collection<GatewayIntent> getIntents(){
+		Collection<GatewayIntent> gi = new ArrayList<>();
+		gi.add(GatewayIntent.DIRECT_MESSAGE_REACTIONS);
+		gi.add(GatewayIntent.DIRECT_MESSAGE_TYPING);
+		gi.add(GatewayIntent.DIRECT_MESSAGES);
+		gi.add(GatewayIntent.GUILD_BANS);
+		gi.add(GatewayIntent.GUILD_EMOJIS);
+		gi.add(GatewayIntent.GUILD_INVITES);
+		gi.add(GatewayIntent.GUILD_MESSAGE_REACTIONS);
+		gi.add(GatewayIntent.GUILD_MESSAGE_TYPING);
+		gi.add(GatewayIntent.GUILD_MESSAGES);
+		gi.add(GatewayIntent.GUILD_VOICE_STATES);
+		return gi;
 	}
 
 	private static void initLangs() throws JSONException, IOException {

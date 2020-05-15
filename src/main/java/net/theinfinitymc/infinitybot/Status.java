@@ -15,19 +15,15 @@ class Status {
     };
 
     private static int index;
-    private static int interval = 2;
 
     static void start() {
         TIMER.purge();
         index = new Random().nextInt(GAMES.length);
-        while (GAMES.length % interval != 0) {
-            interval++;
-        }
         TIMER.scheduleAtFixedRate(
                 new TimerTask() {
                     @Override
                     public void run() {
-                        index += interval;
+                        index++;
                         if (index >= GAMES.length) index -= GAMES.length;
                         Activity game = GAMES[index];
                         InfinityBot.getAPI().getPresence().setActivity(game);

@@ -10,7 +10,7 @@ public class Info implements Command {
 	public void execute(MessageReceivedEvent event, String[] args) {
 		Message text = new MessageBuilder().append("__**Infinity Bot**__"
 				+ "\n" + "Version: " + "2.1.2"
-				+ "\n" + "API: JDA v" + "4.1.1_150" + " w/ LavaPlayer v" + "1.3.47"
+				+ "\n" + "API: JDA v" + "4.1.1_155" + " w/ LavaPlayer v" + "1.3.49"
 				+ "\n" + "Creator: NextInfinity").build();
 		event.getChannel().sendMessage(text).queue();
 	}

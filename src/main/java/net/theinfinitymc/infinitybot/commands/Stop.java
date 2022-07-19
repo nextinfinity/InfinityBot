@@ -1,18 +1,29 @@
 package net.theinfinitymc.infinitybot.commands;
 
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.theinfinitymc.infinitybot.InfinityBot;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.theinfinitymc.infinitybot.AudioManager;
+import net.theinfinitymc.infinitybot.Command;
 
-public class Stop implements Command {
+import java.util.List;
 
-	@Override
-	public void execute(MessageReceivedEvent event, String[] args) {
-		InfinityBot.getAudio().stop(event.getGuild());
+public class Stop extends Command {
+
+	public Stop(AudioManager audioManager) {
+		super(
+				audioManager,
+				"stop",
+				"Stops the currently playing music, if there is any.",
+				List.of()
+		);
 	}
 
-	@Override
-	public String getDescription() {
-		return "Stops audio, if it is playing.";
+	public void execute(SlashCommandEvent event) {
+		boolean stopped = getAudioManager().getGuildAudio(event.getGuild(), event.getTextChannel()).stop();
+		if (stopped) {
+			event.getHook().editOriginal("Stopped music.").queue();
+		} else {
+			event.getHook().editOriginal("Music was not playing.").queue();
+		}
 	}
 
 }

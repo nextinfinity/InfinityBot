@@ -1,4 +1,4 @@
-package net.theinfinitymc.infinitybot.utils;
+package net.theinfinitymc.infinitybot;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;
@@ -30,10 +30,6 @@ public class AudioPlayerSendHandler implements AudioSendHandler {
 	@Override
 	public boolean isOpus() {
 		return true;
-	}
-
-	public AudioPlayer getPlayer() {
-		return audioPlayer;
 	}
 
 }

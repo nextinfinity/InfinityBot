@@ -1,18 +1,38 @@
 package net.theinfinitymc.infinitybot.commands;
 
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.theinfinitymc.infinitybot.InfinityBot;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.theinfinitymc.infinitybot.AudioManager;
+import net.theinfinitymc.infinitybot.Command;
 
-public class Pause implements Command {
+import java.util.List;
 
-	@Override
-	public void execute(MessageReceivedEvent event, String[] args) {
-		InfinityBot.getAudio().togglePause(event.getGuild(), event.getTextChannel());
+public class Pause extends Command {
+	public enum PauseStatus {
+		PAUSED, UNPAUSED, NO_MUSIC
 	}
 
-	@Override
-	public String getDescription() {
-		return "Pause/unpause the audio, if any is playing.";
+	public Pause(AudioManager audioManager) {
+		super(
+				audioManager,
+				"pause",
+				"Pause or unpause the currently playing music, if there is any.",
+				List.of()
+		);
+	}
+
+	public void execute(SlashCommandEvent event) {
+		PauseStatus paused = getAudioManager().getGuildAudio(event.getGuild(), event.getTextChannel()).togglePause();
+		switch (paused) {
+			case PAUSED:
+				event.getHook().editOriginal("Song paused.").queue();
+				break;
+			case UNPAUSED:
+				event.getHook().editOriginal("Song resumed.").queue();
+				break;
+			case NO_MUSIC:
+				event.getHook().editOriginal("Music was not playing.").queue();
+				break;
+		}
 	}
 
 }

@@ -1,28 +1,32 @@
 package net.theinfinitymc.infinitybot.commands;
 
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.theinfinitymc.infinitybot.InfinityBot;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.theinfinitymc.infinitybot.AudioManager;
+import net.theinfinitymc.infinitybot.Command;
 
-public class Volume implements Command {
+import java.util.List;
+import java.util.Objects;
 
-	@Override
-	public void execute(MessageReceivedEvent event, String[] args) {
-		if (args.length > 0) {
-			int vol = Integer.parseInt(args[0]);
-			if (vol > 1000) {
-				vol = 1000;
-			}
-			if (vol < 0) {
-				vol = 0;
-			}
-			InfinityBot.getAudio().setVolume(vol, event.getGuild());
-			event.getChannel().sendMessage("Volume set to " + vol + "!").queue();
-		}
+public class Volume extends Command {
+
+	public Volume(AudioManager audioManager) {
+		super(
+				audioManager,
+				"volume",
+				"Sets the volume of the currently playing music.",
+				List.of(
+					new OptionData(OptionType.INTEGER, "volume", "The volume to set")
+							.setRequired(true).setMinValue(0).setMaxValue(100)
+				)
+		);
 	}
 
-	@Override
-	public String getDescription() {
-		return "Sets the volume of audio. Number between 0 and 100.";
+	public void execute(SlashCommandEvent event) {
+		int volume = (int) Objects.requireNonNull(event.getOption("volume")).getAsLong();
+		getAudioManager().getGuildAudio(event.getGuild(), event.getTextChannel()).setVolume(volume);
+		event.getHook().editOriginalFormat("Volume set to %d.", volume).queue();
 	}
 
 }

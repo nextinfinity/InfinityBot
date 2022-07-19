@@ -1,0 +1,123 @@
+package net.theinfinitymc.infinitybot;
+
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
+import lombok.Value;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.theinfinitymc.infinitybot.commands.Pause;
+
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
+@Value
+public class GuildAudio extends AudioEventAdapter {
+	Guild guild;
+	TextChannel channel;
+	AudioPlayer player;
+	BlockingQueue<AudioTrack> queue;
+
+	GuildAudio(Guild guild, TextChannel channel, AudioPlayer player) {
+		this.guild = guild;
+		this.channel = channel;
+		this.player = player;
+		this.queue = new LinkedBlockingQueue<>();
+		guild.getAudioManager().setSendingHandler(new AudioPlayerSendHandler(player));
+		player.addListener(this);
+		player.setVolume(20);
+	}
+
+	public void queue(AudioTrack track) {
+		if (!player.startTrack(track, true)) {
+			queue.offer(track);
+		}
+	}
+
+	public Pause.PauseStatus togglePause() {
+		if (player.getPlayingTrack() == null) {
+			return Pause.PauseStatus.NO_MUSIC;
+		}
+		if (!player.isPaused()) {
+			player.setPaused(true);
+			return Pause.PauseStatus.PAUSED;
+		} else {
+			player.setPaused(false);
+			return Pause.PauseStatus.UNPAUSED;
+		}
+	}
+
+	public boolean skip() {
+		if (!isPlaying()) {
+			return false;
+		}
+		playNext();
+		return true;
+	}
+
+	private void playNext() {
+		if (!hasNext() || !player.startTrack(queue.poll(), false)) {
+			player.stopTrack();
+			disconnect();
+		}
+	}
+
+	public boolean stop() {
+		if (!isPlaying()) {
+			return false;
+		}
+		player.stopTrack();
+		disconnect();
+		queue.clear();
+		return true;
+	}
+
+	public void setVolume(int volume) {
+		player.setVolume(volume);
+	}
+
+	public boolean isPlaying() {
+		return player.getPlayingTrack() != null;
+	}
+
+	public boolean hasNext() {
+		return !queue.isEmpty();
+	}
+
+	public void connect(VoiceChannel channel) {
+		guild.getAudioManager().openAudioConnection(channel);
+	}
+
+	public void disconnect() {
+		guild.getAudioManager().closeAudioConnection();
+	}
+
+	public boolean isConnected() {
+		return guild.getAudioManager().isConnected();
+	}
+
+	@Override
+	public void onTrackStart(AudioPlayer player, AudioTrack track) {
+		channel.sendMessage("Now Playing: " + track.getInfo().title).queue();
+	}
+
+	@Override
+	public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
+		if (endReason == AudioTrackEndReason.LOAD_FAILED) {
+			channel.sendMessage("Unable to play the current song - proceeding to next available.").queue();
+		}
+		if (endReason.mayStartNext) {
+			playNext();
+		} else if (endReason != AudioTrackEndReason.REPLACED) {
+			disconnect();
+		}
+	}
+
+	@Override
+	public void onTrackStuck(AudioPlayer player, AudioTrack track, long thresholdMs) {
+		channel.sendMessage("No audio detected, skipping track.").queue();
+		playNext();
+	}
+}

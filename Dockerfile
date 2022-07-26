@@ -5,7 +5,7 @@ WORKDIR /home/gradle/src
 RUN gradle shadowJar
 
 FROM openjdk:11
-COPY --from=builder /home/gradle/src/build/libs/InfinityBot-2.1.1-all.jar ./InfinityBot.jar
+COPY --from=builder /home/gradle/src/build/libs/InfinityBot-*-all.jar ./InfinityBot.jar
 MAINTAINER NextInfinity
 
 ENTRYPOINT java -jar "InfinityBot.jar"

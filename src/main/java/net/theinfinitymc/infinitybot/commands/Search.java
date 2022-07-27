@@ -9,7 +9,6 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.theinfinitymc.infinitybot.AudioManager;
 import net.theinfinitymc.infinitybot.Command;
-import net.theinfinitymc.infinitybot.Config;
 import net.theinfinitymc.infinitybot.QueueCallback;
 
 import java.util.List;
@@ -20,7 +19,7 @@ public class Search extends Command {
 	private final com.google.api.services.youtube.YouTube youtube;
 	private final String key;
 
-	public Search(AudioManager audioManager, Config config) {
+	public Search(AudioManager audioManager) {
 		super(
 				audioManager,
 				"search",
@@ -32,7 +31,7 @@ public class Search extends Command {
 		);
 		this.youtube = new com.google.api.services.youtube.YouTube.Builder(new NetHttpTransport(), new JacksonFactory(),
 				request -> {}).setApplicationName("infinitybot-youtube-search").build();
-		this.key = config.getGoogleKey();
+		this.key = System.getenv("YOUTUBE_API_KEY");
 	}
 
 	public void execute(SlashCommandEvent event) {

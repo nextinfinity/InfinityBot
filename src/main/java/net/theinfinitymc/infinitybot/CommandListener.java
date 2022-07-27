@@ -15,11 +15,11 @@ public class CommandListener extends ListenerAdapter {
 	/**
 	 * Load all commands into a map.
 	 */
-	public void registerCommands(JDA jda, AudioManager audioManager, Config config) {
+	public void registerCommands(JDA jda, AudioManager audioManager) {
 		registerCommand(jda, new Pause(audioManager));
 		registerCommand(jda, new Play(audioManager));
 		registerCommand(jda, new Queue(audioManager));
-		registerCommand(jda, new Search(audioManager, config));
+		registerCommand(jda, new Search(audioManager));
 		registerCommand(jda, new Skip(audioManager));
 		registerCommand(jda, new Stop(audioManager));
 		registerCommand(jda, new Volume(audioManager));

@@ -7,14 +7,12 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
-import java.io.IOException;
 import java.util.Collections;
 
 @Value
 public class InfinityBot {
 	JDA jda;
 	AudioManager audioManager;
-	Config config;
 
 	public static void main(String[] args) {
 		new InfinityBot();
@@ -22,15 +20,14 @@ public class InfinityBot {
 
 	InfinityBot() {
 		try {
-			this.config = new Config();
 			CommandListener listener = new CommandListener();
-			this.jda = JDABuilder.createDefault(config.getToken(),
+			this.jda = JDABuilder.createDefault(System.getenv("DISCORD_BOT_TOKEN"),
 							Collections.singletonList(GatewayIntent.GUILD_VOICE_STATES))
 					.addEventListeners(listener)
 					.setAudioSendFactory(new NativeAudioSendFactory())
 					.build();
 			this.audioManager = new AudioManager();
-			listener.registerCommands(jda, audioManager, config);
+			listener.registerCommands(jda, audioManager);
 			jda.getPresence().setActivity(Activity.watching("discord.gg/PvmhyMs for support"));
 		} catch (Exception exception) {
 			InstantiationError error = new InstantiationError("Failed to load InfinityBot.");

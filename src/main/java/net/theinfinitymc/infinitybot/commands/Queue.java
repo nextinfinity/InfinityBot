@@ -21,7 +21,7 @@ public class Queue extends Command {
     }
 
     public void execute(SlashCommandEvent event) {
-        GuildAudio guildAudio = getAudioManager().getGuildAudio(event.getGuild(), event.getTextChannel());
+        GuildAudio guildAudio = getAudioManager().getGuildAudio(event.getGuild());
         if (guildAudio.hasNext()) {
             StringBuilder response = new StringBuilder("__Queue__");
             AudioTrack[] trackList = new AudioTrack[guildAudio.getQueue().size()];

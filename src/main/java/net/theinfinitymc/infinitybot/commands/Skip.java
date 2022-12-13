@@ -18,7 +18,7 @@ public class Skip extends Command {
 	}
 
 	public void execute(SlashCommandEvent event) {
-		boolean skipped = getAudioManager().getGuildAudio(event.getGuild(), event.getTextChannel()).skip();
+		boolean skipped = getAudioManager().getGuildAudio(event.getGuild()).skip();
 		if (skipped) {
 			event.getHook().editOriginal("Skipped song.").queue();
 		} else {

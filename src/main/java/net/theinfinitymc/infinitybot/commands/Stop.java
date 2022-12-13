@@ -18,7 +18,7 @@ public class Stop extends Command {
 	}
 
 	public void execute(SlashCommandEvent event) {
-		boolean stopped = getAudioManager().getGuildAudio(event.getGuild(), event.getTextChannel()).stop();
+		boolean stopped = getAudioManager().getGuildAudio(event.getGuild()).stop();
 		if (stopped) {
 			event.getHook().editOriginal("Stopped music.").queue();
 		} else {

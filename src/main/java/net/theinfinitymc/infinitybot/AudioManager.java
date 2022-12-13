@@ -28,7 +28,7 @@ public class AudioManager {
 	}
 
 	public void tryAddToQueue(String song, Guild guild, TextChannel channel, User user, QueueCallback callback) {
-		GuildAudio guildAudio = getGuildAudio(guild, channel);
+		GuildAudio guildAudio = getGuildAudio(guild);
 		if (!guildAudio.isConnected()) {
 			GuildVoiceState voiceState = guild.getMember(user).getVoiceState();
 			if (voiceState.inVoiceChannel()) {
@@ -46,10 +46,11 @@ public class AudioManager {
 	}
 
 	private void loadSong(String song, Guild guild, TextChannel channel, QueueCallback callback){
-		GuildAudio guildAudio = getGuildAudio(guild, channel);
+		GuildAudio guildAudio = getGuildAudio(guild);
 		audioPlayerManager.loadItem(song, new AudioLoadResultHandler() {
 			@Override
 			public void trackLoaded(AudioTrack track) {
+				track.setUserData(channel);
 				guildAudio.queue(track);
 				callback.call(QueueCallback.QueueStatus.SUCCESS);
 			}
@@ -57,6 +58,7 @@ public class AudioManager {
 			@Override
 			public void playlistLoaded(AudioPlaylist playlist) {
 				for (AudioTrack track : playlist.getTracks()) {
+					track.setUserData(channel);
 					guildAudio.queue(track);
 				}
 				callback.call(QueueCallback.QueueStatus.SUCCESS);
@@ -80,15 +82,15 @@ public class AudioManager {
 		});
 	}
 	
-	public GuildAudio getGuildAudio(Guild guild, TextChannel channel) {
+	public GuildAudio getGuildAudio(Guild guild) {
 		if (!guildAudioMap.containsKey(guild)) {
-			createGuildAudio(guild, channel);
+			createGuildAudio(guild);
 		}
 		return guildAudioMap.get(guild);
 	}
 
-	private void createGuildAudio(Guild guild, TextChannel channel){
-		GuildAudio guildAudio = new GuildAudio(guild, channel, audioPlayerManager.createPlayer());
+	private void createGuildAudio(Guild guild){
+		GuildAudio guildAudio = new GuildAudio(guild, audioPlayerManager.createPlayer());
 		guildAudioMap.put(guild, guildAudio);
 	}
 }

@@ -6,6 +6,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import lombok.Value;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.theinfinitymc.infinitybot.commands.Pause;
@@ -16,13 +17,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 @Value
 public class GuildAudio extends AudioEventAdapter {
 	Guild guild;
-	TextChannel channel;
 	AudioPlayer player;
 	BlockingQueue<AudioTrack> queue;
 
-	GuildAudio(Guild guild, TextChannel channel, AudioPlayer player) {
+	GuildAudio(Guild guild, AudioPlayer player) {
 		this.guild = guild;
-		this.channel = channel;
 		this.player = player;
 		this.queue = new LinkedBlockingQueue<>();
 		guild.getAudioManager().setSendingHandler(new AudioPlayerSendHandler(player));
@@ -100,13 +99,14 @@ public class GuildAudio extends AudioEventAdapter {
 
 	@Override
 	public void onTrackStart(AudioPlayer player, AudioTrack track) {
-		channel.sendMessage("Now Playing: " + track.getInfo().title).queue();
+		Message message = ((TextChannel) track.getUserData()).sendMessage("Now Playing: " + track.getInfo().title).complete();
+		track.setUserData(message);
 	}
 
 	@Override
 	public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
 		if (endReason == AudioTrackEndReason.LOAD_FAILED) {
-			channel.sendMessage("Unable to play the current song - proceeding to next available.").queue();
+			((Message) track.getUserData()).reply("Unable to play song - proceeding to next available.").queue();
 		}
 		if (endReason.mayStartNext) {
 			playNext();
@@ -117,7 +117,7 @@ public class GuildAudio extends AudioEventAdapter {
 
 	@Override
 	public void onTrackStuck(AudioPlayer player, AudioTrack track, long thresholdMs) {
-		channel.sendMessage("No audio detected, skipping track.").queue();
+		((Message) track.getUserData()).reply("No audio detected, skipping track.").queue();
 		playNext();
 	}
 }

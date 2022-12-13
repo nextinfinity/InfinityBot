@@ -25,7 +25,7 @@ public class Volume extends Command {
 
 	public void execute(SlashCommandEvent event) {
 		int volume = (int) Objects.requireNonNull(event.getOption("volume")).getAsLong();
-		getAudioManager().getGuildAudio(event.getGuild(), event.getTextChannel()).setVolume(volume);
+		getAudioManager().getGuildAudio(event.getGuild()).setVolume(volume);
 		event.getHook().editOriginalFormat("Volume set to %d.", volume).queue();
 	}
 

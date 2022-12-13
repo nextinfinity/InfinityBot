@@ -21,7 +21,7 @@ public class Pause extends Command {
 	}
 
 	public void execute(SlashCommandEvent event) {
-		PauseStatus paused = getAudioManager().getGuildAudio(event.getGuild(), event.getTextChannel()).togglePause();
+		PauseStatus paused = getAudioManager().getGuildAudio(event.getGuild()).togglePause();
 		switch (paused) {
 			case PAUSED:
 				event.getHook().editOriginal("Song paused.").queue();

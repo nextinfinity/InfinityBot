@@ -42,15 +42,15 @@ public class AudioManager {
 				callback.call(QueueCallback.QueueStatus.FAILURE_CHANNEL);
 			}
 		}
-		loadSong(song, guild, channel, callback);
+		loadSong(song, guild, user, channel, callback);
 	}
 
-	private void loadSong(String song, Guild guild, TextChannel channel, QueueCallback callback){
+	private void loadSong(String song, Guild guild, User user, TextChannel channel, QueueCallback callback){
 		GuildAudio guildAudio = getGuildAudio(guild);
 		audioPlayerManager.loadItem(song, new AudioLoadResultHandler() {
 			@Override
 			public void trackLoaded(AudioTrack track) {
-				track.setUserData(channel);
+				track.setUserData(new GuildTrackData(user, channel));
 				guildAudio.queue(track);
 				callback.call(QueueCallback.QueueStatus.SUCCESS);
 			}
@@ -58,7 +58,7 @@ public class AudioManager {
 			@Override
 			public void playlistLoaded(AudioPlaylist playlist) {
 				for (AudioTrack track : playlist.getTracks()) {
-					track.setUserData(channel);
+					track.setUserData(new GuildTrackData(user, channel));
 					guildAudio.queue(track);
 				}
 				callback.call(QueueCallback.QueueStatus.SUCCESS);

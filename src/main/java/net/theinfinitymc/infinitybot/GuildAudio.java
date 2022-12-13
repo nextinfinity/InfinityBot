@@ -9,11 +9,11 @@ import lombok.Value;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.theinfinitymc.infinitybot.commands.Pause;
 
 import java.awt.*;
+import java.time.Instant;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -103,12 +103,14 @@ public class GuildAudio extends AudioEventAdapter {
 	@Override
 	public void onTrackStart(AudioPlayer player, AudioTrack track) {
 		AudioTrackInfo trackInfo = track.getInfo();
+		GuildTrackData trackData = (GuildTrackData) track.getUserData();
 		EmbedBuilder embed = new EmbedBuilder();
 		embed.setTitle(trackInfo.title, trackInfo.uri);
 		embed.setColor(Color.red);
-		embed.setDescription(trackInfo.author);
 		embed.setAuthor("Now Playing", null, "https://static3.depositphotos.com/1001442/197/i/600/depositphotos_1970119-stock-photo-music-record.jpg");
-		Message message = ((TextChannel) track.getUserData()).sendMessageEmbeds(embed.build()).complete();
+		embed.setFooter(trackData.getAdder().getName());
+		embed.setTimestamp(Instant.now());
+		Message message = trackData.getChannel().sendMessageEmbeds(embed.build()).complete();
 		track.setUserData(message);
 	}
 

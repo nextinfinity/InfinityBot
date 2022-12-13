@@ -4,13 +4,16 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import lombok.Value;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.theinfinitymc.infinitybot.commands.Pause;
 
+import java.awt.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -99,7 +102,13 @@ public class GuildAudio extends AudioEventAdapter {
 
 	@Override
 	public void onTrackStart(AudioPlayer player, AudioTrack track) {
-		Message message = ((TextChannel) track.getUserData()).sendMessage("Now Playing: " + track.getInfo().title).complete();
+		AudioTrackInfo trackInfo = track.getInfo();
+		EmbedBuilder embed = new EmbedBuilder();
+		embed.setTitle(trackInfo.title, trackInfo.uri);
+		embed.setColor(Color.red);
+		embed.setDescription(trackInfo.author);
+		embed.setAuthor("Now Playing", null, "https://static3.depositphotos.com/1001442/197/i/600/depositphotos_1970119-stock-photo-music-record.jpg");
+		Message message = ((TextChannel) track.getUserData()).sendMessageEmbeds(embed.build()).complete();
 		track.setUserData(message);
 	}
 

@@ -15,7 +15,7 @@ public class QueueCallback {
     public void call(QueueStatus status) {
         switch (status) {
             case SUCCESS:
-                hook.editOriginalFormat("Added %s to the queue.", song).queue();
+                hook.editOriginalFormat("Added to the queue.").queue();
                 break;
             case FAILURE_CHANNEL:
                 hook.editOriginal("You must be in a voice channel for the bot to join.").queue();
@@ -24,7 +24,7 @@ public class QueueCallback {
                 hook.editOriginal("Unable to join your voice channel.").queue();
                 break;
             case FAILURE_LOAD:
-                hook.editOriginalFormat("Unable to load %s.", song).queue();
+                hook.editOriginalFormat("Unable to load track.").queue();
                 break;
         }
     }

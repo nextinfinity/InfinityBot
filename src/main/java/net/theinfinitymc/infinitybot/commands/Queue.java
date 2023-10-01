@@ -2,7 +2,7 @@ package net.theinfinitymc.infinitybot.commands;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.theinfinitymc.infinitybot.AudioManager;
 import net.theinfinitymc.infinitybot.Command;
 import net.theinfinitymc.infinitybot.GuildAudio;
@@ -20,7 +20,7 @@ public class Queue extends Command {
         );
     }
 
-    public void execute(SlashCommandEvent event) {
+    public void execute(SlashCommandInteractionEvent event) {
         GuildAudio guildAudio = getAudioManager().getGuildAudio(event.getGuild());
         if (guildAudio.hasNext()) {
             StringBuilder response = new StringBuilder("__Queue__");

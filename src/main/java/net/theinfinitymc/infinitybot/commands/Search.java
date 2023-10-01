@@ -1,10 +1,11 @@
 package net.theinfinitymc.infinitybot.commands;
 
 import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.SearchResult;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.theinfinitymc.infinitybot.AudioManager;
@@ -18,6 +19,7 @@ public class Search extends Command {
 
 	private final com.google.api.services.youtube.YouTube youtube;
 	private final String key;
+	private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
 
 	public Search(AudioManager audioManager) {
 		super(
@@ -29,15 +31,15 @@ public class Search extends Command {
 								.setRequired(true)
 				)
 		);
-		this.youtube = new com.google.api.services.youtube.YouTube.Builder(new NetHttpTransport(), new JacksonFactory(),
+		this.youtube = new com.google.api.services.youtube.YouTube.Builder(new NetHttpTransport(), JSON_FACTORY,
 				request -> {}).setApplicationName("infinitybot-youtube-search").build();
 		this.key = System.getenv("YOUTUBE_API_KEY");
 	}
 
-	public void execute(SlashCommandEvent event) {
+	public void execute(SlashCommandInteractionEvent event) {
 		String query = Objects.requireNonNull(event.getOption("query")).getAsString();
 		String result = search(query);
-		getAudioManager().tryAddToQueue(result, event.getGuild(), event.getTextChannel(), event.getUser(),
+		getAudioManager().tryAddToQueue(result, event.getGuild(), event.getChannel(), event.getUser(),
 				new QueueCallback(event.getHook(), result));
 	}
 

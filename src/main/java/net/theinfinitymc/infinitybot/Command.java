@@ -1,7 +1,7 @@
 package net.theinfinitymc.infinitybot;
 
 import lombok.Data;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.util.List;
@@ -13,5 +13,5 @@ public abstract class Command {
 	private final String description;
 	private final List<OptionData> options;
 
-	public abstract void execute(SlashCommandEvent event);
+	public abstract void execute(SlashCommandInteractionEvent event);
 }

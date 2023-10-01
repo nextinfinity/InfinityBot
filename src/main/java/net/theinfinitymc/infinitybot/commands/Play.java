@@ -1,6 +1,6 @@
 package net.theinfinitymc.infinitybot.commands;
 
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.theinfinitymc.infinitybot.AudioManager;
@@ -24,9 +24,9 @@ public class Play extends Command {
 		);
 	}
 
-	public void execute(SlashCommandEvent event) {
+	public void execute(SlashCommandInteractionEvent event) {
 		String link = Objects.requireNonNull(event.getOption("link")).getAsString();
-		getAudioManager().tryAddToQueue(link, event.getGuild(), event.getTextChannel(), event.getUser(),
+		getAudioManager().tryAddToQueue(link, event.getGuild(), event.getChannel(), event.getUser(),
 				new QueueCallback(event.getHook(), link));
 	}
 

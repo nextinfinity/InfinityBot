@@ -1,7 +1,7 @@
 package net.theinfinitymc.infinitybot;
 
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.theinfinitymc.infinitybot.commands.*;
 
@@ -31,7 +31,7 @@ public class CommandListener extends ListenerAdapter {
 	}
 
 	@Override
-	public void onSlashCommand(SlashCommandEvent event) {
+	public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
 		Command command = commands.get(event.getName());
 		if (command != null) {
 			event.deferReply().queue();

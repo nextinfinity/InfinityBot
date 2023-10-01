@@ -5,11 +5,12 @@ import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
+import lombok.EqualsAndHashCode;
 import lombok.Value;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion;
 import net.theinfinitymc.infinitybot.commands.Pause;
 
 import java.awt.*;
@@ -18,6 +19,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 @Value
+@EqualsAndHashCode(callSuper=false)
 public class GuildAudio extends AudioEventAdapter {
 	Guild guild;
 	AudioPlayer player;
@@ -88,7 +90,7 @@ public class GuildAudio extends AudioEventAdapter {
 		return !queue.isEmpty();
 	}
 
-	public void connect(VoiceChannel channel) {
+	public void connect(AudioChannelUnion channel) {
 		guild.getAudioManager().openAudioConnection(channel);
 	}
 

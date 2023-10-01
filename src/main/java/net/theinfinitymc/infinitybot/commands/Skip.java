@@ -1,6 +1,6 @@
 package net.theinfinitymc.infinitybot.commands;
 
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.theinfinitymc.infinitybot.AudioManager;
 import net.theinfinitymc.infinitybot.Command;
 
@@ -17,7 +17,7 @@ public class Skip extends Command {
 		);
 	}
 
-	public void execute(SlashCommandEvent event) {
+	public void execute(SlashCommandInteractionEvent event) {
 		boolean skipped = getAudioManager().getGuildAudio(event.getGuild()).skip();
 		if (skipped) {
 			event.getHook().editOriginal("Skipped song.").queue();

@@ -9,11 +9,12 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class AudioManager {
 	private final AudioPlayerManager audioPlayerManager;
@@ -27,11 +28,11 @@ public class AudioManager {
 		this.guildAudioMap = new HashMap<>();
 	}
 
-	public void tryAddToQueue(String song, Guild guild, TextChannel channel, User user, QueueCallback callback) {
+	public void tryAddToQueue(String song, Guild guild, MessageChannelUnion channel, User user, QueueCallback callback) {
 		GuildAudio guildAudio = getGuildAudio(guild);
 		if (!guildAudio.isConnected()) {
-			GuildVoiceState voiceState = guild.getMember(user).getVoiceState();
-			if (voiceState.inVoiceChannel()) {
+			GuildVoiceState voiceState = Objects.requireNonNull(guild.getMember(user)).getVoiceState();
+			if (voiceState != null && voiceState.inAudioChannel()) {
 				try {
 					guildAudio.connect(voiceState.getChannel());
 				} catch (Exception e) {
@@ -45,7 +46,7 @@ public class AudioManager {
 		loadSong(song, guild, user, channel, callback);
 	}
 
-	private void loadSong(String song, Guild guild, User user, TextChannel channel, QueueCallback callback){
+	private void loadSong(String song, Guild guild, User user, MessageChannelUnion channel, QueueCallback callback){
 		GuildAudio guildAudio = getGuildAudio(guild);
 		audioPlayerManager.loadItem(song, new AudioLoadResultHandler() {
 			@Override

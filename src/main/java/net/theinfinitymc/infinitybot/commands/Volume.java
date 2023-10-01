@@ -1,6 +1,6 @@
 package net.theinfinitymc.infinitybot.commands;
 
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.theinfinitymc.infinitybot.AudioManager;
@@ -23,7 +23,7 @@ public class Volume extends Command {
 		);
 	}
 
-	public void execute(SlashCommandEvent event) {
+	public void execute(SlashCommandInteractionEvent event) {
 		int volume = (int) Objects.requireNonNull(event.getOption("volume")).getAsLong();
 		getAudioManager().getGuildAudio(event.getGuild()).setVolume(volume);
 		event.getHook().editOriginalFormat("Volume set to %d.", volume).queue();

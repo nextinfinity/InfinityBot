@@ -34,10 +34,12 @@ public class GuildAudio extends AudioEventAdapter {
 		player.setVolume(20);
 	}
 
-	public void queue(AudioTrack track) {
-		if (!player.startTrack(track, true)) {
-			queue.offer(track);
+	public boolean queue(AudioTrack track) {
+		if (player.startTrack(track, true)) {
+			return true;
 		}
+
+		return queue.offer(track);
 	}
 
 	public Pause.PauseStatus togglePause() {
@@ -96,6 +98,7 @@ public class GuildAudio extends AudioEventAdapter {
 
 	public void disconnect() {
 		guild.getAudioManager().closeAudioConnection();
+		InfinityBot.instance.updateActivity();
 	}
 
 	public boolean isConnected() {
@@ -110,10 +113,13 @@ public class GuildAudio extends AudioEventAdapter {
 		embed.setTitle(trackInfo.title, trackInfo.uri);
 		embed.setColor(Color.red);
 		embed.setAuthor("Now Playing", null, "https://static3.depositphotos.com/1001442/197/i/600/depositphotos_1970119-stock-photo-music-record.jpg");
-		embed.setFooter(trackData.getAdder().getName());
+		embed.setImage(track.getInfo().artworkUrl);
+		embed.setFooter("Requested by " + trackData.getAdderName(), trackData.getAdderAvatar());
 		embed.setTimestamp(Instant.now());
 		Message message = trackData.getChannel().sendMessageEmbeds(embed.build()).complete();
 		track.setUserData(message);
+
+		InfinityBot.instance.updateActivity();
 	}
 
 	@Override

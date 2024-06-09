@@ -16,18 +16,18 @@ public class Play extends Command {
 		super(
 				audioManager,
 				"play",
-				"Plays audio from the specified link in the user's voice channel.",
+				"Plays audio from the specified source in the user's voice channel.",
 				List.of(
-						new OptionData(OptionType.STRING, "link", "The link to play audio from (YouTube, SoundCloud, etc)")
+						new OptionData(OptionType.STRING, "audio", "Either a link to play audio from (YouTube, SoundCloud, etc) or a YouTube search query")
 								.setRequired(true)
 				)
 		);
 	}
 
 	public void execute(SlashCommandInteractionEvent event) {
-		String link = Objects.requireNonNull(event.getOption("link")).getAsString();
-		getAudioManager().tryAddToQueue(link, event.getGuild(), event.getChannel(), event.getUser(),
-				new QueueCallback(event.getHook(), link));
+		String audio = Objects.requireNonNull(event.getOption("audio")).getAsString();
+		getAudioManager().tryAddToQueue(audio, event.getGuild(), event.getChannel(), event.getUser(),
+				new QueueCallback(event.getHook(), audio));
 	}
 
 }

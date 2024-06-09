@@ -3,74 +3,119 @@ package net.theinfinitymc.infinitybot;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
+import com.sedmelluq.discord.lavaplayer.source.AudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import dev.lavalink.youtube.YoutubeAudioSourceManager;
+import dev.lavalink.youtube.clients.*;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class AudioManager {
 	private final AudioPlayerManager audioPlayerManager;
 	private final Map<Guild, GuildAudio> guildAudioMap;
 	
 	AudioManager(){
-		this.audioPlayerManager = new DefaultAudioPlayerManager();
-		AudioSourceManagers.registerRemoteSources(audioPlayerManager);
-		audioPlayerManager.setFrameBufferDuration(10000);
-		audioPlayerManager.setTrackStuckThreshold(5000);
 		this.guildAudioMap = new HashMap<>();
+		this.audioPlayerManager = new DefaultAudioPlayerManager();
+
+		// Register default sources, but replace the deprecated YT source with new version
+		audioPlayerManager.registerSourceManager(new YoutubeAudioSourceManager(true, new MusicWithThumbnail(), new WebWithThumbnail(), new AndroidWithThumbnail(), new TvHtml5EmbeddedWithThumbnail()));
+		@SuppressWarnings("deprecation") Class<? extends AudioSourceManager> deprecatedYoutubeSource = com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager.class;
+		AudioSourceManagers.registerRemoteSources(audioPlayerManager, deprecatedYoutubeSource);
+
+		audioPlayerManager.setFrameBufferDuration(10000);
+		audioPlayerManager.setTrackStuckThreshold(500000);
 	}
 
 	public void tryAddToQueue(String song, Guild guild, MessageChannelUnion channel, User user, QueueCallback callback) {
 		GuildAudio guildAudio = getGuildAudio(guild);
-		if (!guildAudio.isConnected()) {
-			GuildVoiceState voiceState = Objects.requireNonNull(guild.getMember(user)).getVoiceState();
-			if (voiceState != null && voiceState.inAudioChannel()) {
-				try {
-					guildAudio.connect(voiceState.getChannel());
-				} catch (Exception e) {
-					guildAudio.disconnect();
-					callback.call(QueueCallback.QueueStatus.FAILURE_CONNECTION);
-				}
-			} else {
-				callback.call(QueueCallback.QueueStatus.FAILURE_CHANNEL);
-			}
+		if (connectToGuild(guildAudio, user, callback)) {
+			loadSong(song, guildAudio, new GuildTrackData(user, channel, guild), callback);
 		}
-		loadSong(song, guild, user, channel, callback);
 	}
 
-	private void loadSong(String song, Guild guild, User user, MessageChannelUnion channel, QueueCallback callback){
-		GuildAudio guildAudio = getGuildAudio(guild);
+	public boolean connectToGuild(GuildAudio guildAudio, User user, QueueCallback callback) {
+		if (guildAudio.isConnected()) {
+			// Don't hop around if already connected - stop and restart to change channels
+			return true;
+		}
+
+		GuildVoiceState voiceState = Objects.requireNonNull(guildAudio.getGuild().getMember(user)).getVoiceState();
+		if (voiceState != null && voiceState.inAudioChannel()) {
+
+			try {
+				guildAudio.connect(voiceState.getChannel());
+			} catch (Exception e) {
+				guildAudio.disconnect();
+				callback.call(QueueCallback.QueueStatus.FAILURE_CONNECTION, Objects.requireNonNull(voiceState.getChannel()).getName());
+				return false;
+			}
+		} else {
+			callback.call(QueueCallback.QueueStatus.FAILURE_CHANNEL);
+			return false;
+		}
+
+		return true;
+	}
+
+	private void loadSong(String song, GuildAudio guildAudio, GuildTrackData guildTrackData, QueueCallback callback) {
 		audioPlayerManager.loadItem(song, new AudioLoadResultHandler() {
+			boolean retry = false;
 			@Override
 			public void trackLoaded(AudioTrack track) {
-				track.setUserData(new GuildTrackData(user, channel));
+				track.setUserData(guildTrackData);
 				guildAudio.queue(track);
-				callback.call(QueueCallback.QueueStatus.SUCCESS);
+				if (guildAudio.queue(track)) {
+					callback.call(QueueCallback.QueueStatus.SUCCESS, track.getInfo().title);
+				} else {
+					callback.call(QueueCallback.QueueStatus.FAILURE_QUEUE, song);
+				}
 			}
 
 			@Override
 			public void playlistLoaded(AudioPlaylist playlist) {
-				for (AudioTrack track : playlist.getTracks()) {
-					track.setUserData(new GuildTrackData(user, channel));
-					guildAudio.queue(track);
+				if (retry)
+				{
+					for (AudioTrack track : playlist.getTracks()) {
+						track.setUserData(guildTrackData);
+						if (guildAudio.queue(track)) {
+							callback.call(QueueCallback.QueueStatus.SUCCESS, track.getInfo().title);
+							return;
+						}
+					}
+					callback.call(QueueCallback.QueueStatus.FAILURE_QUEUE, song);
+				} else {
+					for (AudioTrack track : playlist.getTracks()) {
+						track.setUserData(guildTrackData);
+						if (!guildAudio.queue(track)) {
+							callback.call(QueueCallback.QueueStatus.FAILURE_QUEUE, song);
+							return;
+						}
+					}
+					callback.call(QueueCallback.QueueStatus.SUCCESS, playlist.getName());
 				}
-				callback.call(QueueCallback.QueueStatus.SUCCESS);
 			}
 
 			@Override
 			public void noMatches() {
-				if (!guildAudio.isPlaying()) {
-					guildAudio.disconnect();
+				if (!retry)
+				{
+					// Retry policy: if unable to match, one retry with a youtube search for the input
+					retry = true;
+					audioPlayerManager.loadItem("ytsearch:" + song, this);
+				} else {
+					if (!guildAudio.isPlaying()) {
+						guildAudio.disconnect();
+					}
+					callback.call(QueueCallback.QueueStatus.NO_MATCHES, song);
 				}
-				callback.call(QueueCallback.QueueStatus.FAILURE_LOAD);
 			}
 
 			@Override
@@ -78,7 +123,7 @@ public class AudioManager {
 				if (!guildAudio.isPlaying()) {
 					guildAudio.disconnect();
 				}
-				callback.call(QueueCallback.QueueStatus.FAILURE_LOAD);
+				callback.call(QueueCallback.QueueStatus.FAILURE_LOAD, song);
 			}
 		});
 	}
@@ -88,6 +133,10 @@ public class AudioManager {
 			createGuildAudio(guild);
 		}
 		return guildAudioMap.get(guild);
+	}
+
+	public Collection<GuildAudio> getAllGuildAudios() {
+		return guildAudioMap.values();
 	}
 
 	private void createGuildAudio(Guild guild){

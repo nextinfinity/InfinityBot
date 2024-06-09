@@ -7,15 +7,19 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Value
 public class InfinityBot {
 	JDA jda;
 	AudioManager audioManager;
+	static InfinityBot instance;
 
 	public static void main(String[] args) {
-		new InfinityBot();
+		instance = new InfinityBot();
 	}
 
 	InfinityBot() {
@@ -28,11 +32,26 @@ public class InfinityBot {
 					.build();
 			this.audioManager = new AudioManager();
 			listener.registerCommands(jda, audioManager);
-			jda.getPresence().setActivity(Activity.watching("discord.gg/PvmhyMs for support"));
+			updateActivity();
 		} catch (Exception exception) {
 			InstantiationError error = new InstantiationError("Failed to load InfinityBot.");
 			error.setStackTrace(exception.getStackTrace());
 			throw error;
+		}
+	}
+
+	public void updateActivity() {
+		List<Activity> activities = new ArrayList<>();
+		for (GuildAudio guildAudio : audioManager.getAllGuildAudios()) {
+			if (guildAudio.isPlaying()) {
+				activities.add(Activity.listening(guildAudio.getPlayer().getPlayingTrack().getInfo().title));
+			}
+		}
+
+		if (!activities.isEmpty()) {
+			jda.getPresence().setActivity(activities.get(ThreadLocalRandom.current().nextInt() % activities.size()));
+		} else {
+			jda.getPresence().setActivity(Activity.watching("discord.gg/PvmhyMs for support"));
 		}
 	}
 }

@@ -19,7 +19,6 @@ public class CommandListener extends ListenerAdapter {
 		registerCommand(jda, new Pause(audioManager));
 		registerCommand(jda, new Play(audioManager));
 		registerCommand(jda, new Queue(audioManager));
-		registerCommand(jda, new Search(audioManager));
 		registerCommand(jda, new Skip(audioManager));
 		registerCommand(jda, new Stop(audioManager));
 		registerCommand(jda, new Volume(audioManager));

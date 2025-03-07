@@ -1,6 +1,5 @@
 package net.theinfinitymc.infinitybot;
 
-import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
 import lombok.Value;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -28,7 +27,6 @@ public class InfinityBot {
 			this.jda = JDABuilder.createDefault(System.getenv("DISCORD_BOT_TOKEN"),
 							Collections.singletonList(GatewayIntent.GUILD_VOICE_STATES))
 					.addEventListeners(listener)
-					.setAudioSendFactory(new NativeAudioSendFactory())
 					.build();
 			this.audioManager = new AudioManager();
 			listener.registerCommands(jda, audioManager);

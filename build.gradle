@@ -1,10 +1,10 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "8.1.1"
-    id "io.freefair.lombok" version "8.3"
+    id "com.gradleup.shadow" version "8.3.6"
+    id "io.freefair.lombok" version "8.12.2.1"
 }
 
 apply plugin: 'java'
-version = '3.1.0'
+version = '3.1.1'
 
 jar {
     manifest {
@@ -15,16 +15,16 @@ jar {
 repositories {
     mavenCentral()
     maven { url "https://jitpack.io" }
-    maven { url  "https://maven.lavalink.dev/releases" }
+    maven { url "https://maven.lavalink.dev/releases" }
     jcenter()
 }
 
 dependencies {
-    implementation group: 'net.dv8tion', name: 'JDA', version: '5.0.0-beta.24'
-    implementation group: 'dev.arbjerg', name: 'lavaplayer', version: '2.2.0'
+    implementation group: 'net.dv8tion', name: 'JDA', version: '5.3.0'
+    implementation group: 'dev.arbjerg', name: 'lavaplayer', version: '2.2.3'
     implementation group: 'com.github.aikaterna', name: 'lavaplayer-natives', version: 'original-SNAPSHOT'
-    implementation group: 'com.sedmelluq', name: 'jda-nas', version: '1.1.0'
-    implementation group: 'dev.lavalink.youtube', name: 'v2', version: '1.3.0'
+    implementation group: 'dev.lavalink.youtube', name: 'v2', version: '1.11.5'
+    implementation group: 'org.reflections', name: 'reflections', version: '0.10.2'
 
-    runtimeOnly group: 'org.slf4j', name: 'slf4j-reload4j', version: '2.0.13'
+    runtimeOnly group: 'org.slf4j', name: 'slf4j-reload4j', version: '2.0.17'
 }

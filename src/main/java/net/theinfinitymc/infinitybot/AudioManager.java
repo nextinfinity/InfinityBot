@@ -26,12 +26,10 @@ public class AudioManager {
 		this.audioPlayerManager = new DefaultAudioPlayerManager();
 
 		// Register default sources, but replace the deprecated YT source with new version
-		audioPlayerManager.registerSourceManager(new YoutubeAudioSourceManager(true, new MusicWithThumbnail(), new WebWithThumbnail(), new AndroidWithThumbnail(), new TvHtml5EmbeddedWithThumbnail()));
+		YoutubeAudioSourceManager youtubeSource = new YoutubeAudioSourceManager(true, new WebWithThumbnail(), new TvHtml5EmbeddedWithThumbnail());
+		audioPlayerManager.registerSourceManager(youtubeSource);
 		@SuppressWarnings("deprecation") Class<? extends AudioSourceManager> deprecatedYoutubeSource = com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager.class;
 		AudioSourceManagers.registerRemoteSources(audioPlayerManager, deprecatedYoutubeSource);
-
-		audioPlayerManager.setFrameBufferDuration(10000);
-		audioPlayerManager.setTrackStuckThreshold(500000);
 	}
 
 	public void tryAddToQueue(String song, Guild guild, MessageChannelUnion channel, User user, QueueCallback callback) {
@@ -49,7 +47,6 @@ public class AudioManager {
 
 		GuildVoiceState voiceState = Objects.requireNonNull(guildAudio.getGuild().getMember(user)).getVoiceState();
 		if (voiceState != null && voiceState.inAudioChannel()) {
-
 			try {
 				guildAudio.connect(voiceState.getChannel());
 			} catch (Exception e) {

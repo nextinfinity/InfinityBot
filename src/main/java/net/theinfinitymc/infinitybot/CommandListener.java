@@ -3,10 +3,15 @@ package net.theinfinitymc.infinitybot;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.theinfinitymc.infinitybot.commands.*;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
+import org.reflections.Reflections;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+
+import static org.reflections.scanners.Scanners.SubTypes;
 
 public class CommandListener extends ListenerAdapter {
 
@@ -16,17 +21,22 @@ public class CommandListener extends ListenerAdapter {
 	 * Load all commands into a map.
 	 */
 	public void registerCommands(JDA jda, AudioManager audioManager) {
-		registerCommand(jda, new Pause(audioManager));
-		registerCommand(jda, new Play(audioManager));
-		registerCommand(jda, new Queue(audioManager));
-		registerCommand(jda, new Skip(audioManager));
-		registerCommand(jda, new Stop(audioManager));
-		registerCommand(jda, new Volume(audioManager));
-	}
+		Reflections reflections = new Reflections("net.theinfinitymc.infinitybot");
+		Set<Class<?>> commandClasses = reflections.get(SubTypes.of(Command.class).asClass());
 
-	private void registerCommand(JDA jda, Command command) {
-		jda.upsertCommand(command.getName(), command.getDescription()).addOptions(command.getOptions()).queue();
-		commands.put(command.getName(), command);
+		CommandListUpdateAction commandListUpdateAction = jda.updateCommands();
+
+		for (Class<?> commandClass : commandClasses) {
+            try {
+				Command command = commandClass.asSubclass(Command.class).getConstructor(AudioManager.class).newInstance(audioManager);
+				commandListUpdateAction = commandListUpdateAction.addCommands(Commands.slash(command.getName(), command.getDescription()).addOptions(command.getOptions()));
+				commands.put(command.getName(), command);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+		}
+
+		commandListUpdateAction.queue();
 	}
 
 	@Override

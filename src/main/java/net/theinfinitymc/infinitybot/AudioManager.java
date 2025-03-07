@@ -27,6 +27,7 @@ public class AudioManager {
 
 		// Register default sources, but replace the deprecated YT source with new version
 		YoutubeAudioSourceManager youtubeSource = new YoutubeAudioSourceManager(true, new WebWithThumbnail(), new TvHtml5EmbeddedWithThumbnail());
+		youtubeSource.useOauth2(System.getenv("YOUTUBE_OAUTH_TOKEN"), false);
 		audioPlayerManager.registerSourceManager(youtubeSource);
 		@SuppressWarnings("deprecation") Class<? extends AudioSourceManager> deprecatedYoutubeSource = com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager.class;
 		AudioSourceManagers.registerRemoteSources(audioPlayerManager, deprecatedYoutubeSource);

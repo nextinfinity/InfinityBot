@@ -1,0 +1,19 @@
+services:
+  infinitybot:
+    image: ghcr.io/nextinfinity/infinitybot:master
+    build: .
+    restart: unless-stopped
+    environment:
+      DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN:?Set DISCORD_BOT_TOKEN in .env}
+      YOUTUBE_REMOTE_CIPHER_URL: http://yt-cipher:8001
+      YOUTUBE_REMOTE_CIPHER_PASSWORD: ${YOUTUBE_REMOTE_CIPHER_PASSWORD:?Set YOUTUBE_REMOTE_CIPHER_PASSWORD in .env}
+    depends_on:
+      - yt-cipher
+
+  yt-cipher:
+    image: ghcr.io/kikkia/yt-cipher:master
+    restart: unless-stopped
+    environment:
+      API_TOKEN: ${YOUTUBE_REMOTE_CIPHER_PASSWORD:?Set YOUTUBE_REMOTE_CIPHER_PASSWORD in .env}
+      OVERRIDE_PLAYER_VARIANT: IAS
+    # No host port: only services on the Compose network can reach the API.

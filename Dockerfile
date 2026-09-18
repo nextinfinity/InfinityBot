@@ -1,11 +1,10 @@
-FROM gradle:jdk11 as builder
+FROM eclipse-temurin:25-jdk AS builder
+WORKDIR /app
+COPY . .
+RUN sh ./gradlew --no-daemon shadowJar
 
-COPY --chown=gradle:gradle . /home/gradle/src
-WORKDIR /home/gradle/src
-RUN gradle shadowJar
-
-FROM openjdk:11
-COPY --from=builder /home/gradle/src/build/libs/InfinityBot-*-all.jar ./InfinityBot.jar
-MAINTAINER NextInfinity
-
-ENTRYPOINT java -jar "InfinityBot.jar"
+FROM eclipse-temurin:25-jre
+WORKDIR /app
+COPY --from=builder /app/build/libs/InfinityBot-*-all.jar /app/InfinityBot.jar
+USER 10001:10001
+ENTRYPOINT ["java", "--enable-native-access=ALL-UNNAMED", "-jar", "/app/InfinityBot.jar"]

@@ -4,7 +4,7 @@ A Discord music bot using JDA and Lavaplayer.
 
 Commands: `/play` (URL or search), `/pause`, `/skip`, `/stop`, `/queue`, and `/volume` (0–100).
 
-## Run with yt-cipher
+## Run (with yt-cipher)
 
 Create a Discord application/bot and invite it with the `bot` and `applications.commands` scopes. Grant View Channels, Send Messages, Embed Links, Connect, and Speak in the channels it uses. No privileged gateway intents are required.
 
@@ -18,9 +18,9 @@ docker compose up -d
 docker compose logs -f infinitybot
 ```
 
-This deploys the published InfinityBot image and a private [yt-cipher](https://github.com/kikkia/yt-cipher) service; Compose does not build images locally. No cipher port is exposed on the host, and no YouTube OAuth token is needed. The cipher image uses its upstream `main` tag; pin a tested digest for production. To update, run `docker compose pull` followed by `docker compose up -d` again.
+This deploys the published InfinityBot image and a private [yt-cipher](https://github.com/kikkia/yt-cipher) service. No cipher port is exposed on the host, and no YouTube OAuth token is needed. The cipher image uses its upstream `main` tag. To update, run `docker compose pull` followed by `docker compose up -d` again.
 
-Images: `ghcr.io/nextinfinity/infinitybot:main` (development), release tags, `sha-<commit>` (short SHA), and `latest` (most recent non-prerelease publication). CI builds Linux amd64 images. Initial GHCR packages may need to be made public in package settings for anonymous pulls.
+Images: `ghcr.io/nextinfinity/infinitybot:main` (development), release tags, `sha-<commit>` (short SHA), and `latest` (most recent non-prerelease publication).
 
 ## Configuration
 
@@ -47,7 +47,3 @@ java --enable-native-access=ALL-UNNAMED -jar build/libs/InfinityBot-*-all.jar
 ```
 
 The standalone command expects a separately reachable cipher server. The Compose cipher is not exposed at localhost. Keep tokens/passwords out of Git; `.env` files are ignored and excluded from Docker builds.
-
-## CI
-
-Pull requests build without publishing. Pushes to `main`, published releases, and manual runs build and publish to GHCR including provenance attestations. Manual runs publish tags for the selected ref, not `latest`.

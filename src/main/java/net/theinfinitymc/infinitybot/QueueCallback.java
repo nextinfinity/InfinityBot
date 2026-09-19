@@ -23,6 +23,7 @@ public class QueueCallback {
                 break;
             case NO_MATCHES:
                 hook.editOriginalFormat("Unable to find any matches for \"%s\".", info).queue();
+                break;
             case FAILURE_CHANNEL:
                 hook.editOriginal("You must be in a voice channel for the bot to join.").queue();
                 break;

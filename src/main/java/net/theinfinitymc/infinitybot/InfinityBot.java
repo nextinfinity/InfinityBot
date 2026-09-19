@@ -1,5 +1,7 @@
 package net.theinfinitymc.infinitybot;
 
+import club.minnced.discord.jdave.interop.JDaveSessionFactory;
+import net.dv8tion.jda.api.audio.AudioModuleConfig;
 import lombok.Value;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -26,6 +28,8 @@ public class InfinityBot {
 			CommandListener listener = new CommandListener();
 			this.jda = JDABuilder.createDefault(System.getenv("DISCORD_BOT_TOKEN"),
 							Collections.singletonList(GatewayIntent.GUILD_VOICE_STATES))
+					.setAudioModuleConfig(new AudioModuleConfig()
+							.withDaveSessionFactory(new JDaveSessionFactory()))
 					.addEventListeners(listener)
 					.build();
 			this.audioManager = new AudioManager();
@@ -47,7 +51,7 @@ public class InfinityBot {
 		}
 
 		if (!activities.isEmpty()) {
-			jda.getPresence().setActivity(activities.get(ThreadLocalRandom.current().nextInt() % activities.size()));
+			jda.getPresence().setActivity(activities.get(ThreadLocalRandom.current().nextInt(activities.size())));
 		} else {
 			jda.getPresence().setActivity(Activity.watching("discord.gg/PvmhyMs for support"));
 		}

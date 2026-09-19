@@ -1,10 +1,24 @@
 plugins {
-    id "com.gradleup.shadow" version "8.3.6"
-    id "io.freefair.lombok" version "8.12.2.1"
+    id "com.gradleup.shadow" version "9.6.1"
+    id "io.freefair.lombok" version "9.5.0"
 }
 
 apply plugin: 'java'
 version = '3.1.2'
+
+java {
+    toolchain { languageVersion = JavaLanguageVersion.of(25) }
+}
+
+shadowJar {
+    filesMatching('META-INF/*.kotlin_module') {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    }
+    mergeServiceFiles()
+    filesMatching('META-INF/services/**') {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    }
+}
 
 jar {
     manifest {
@@ -14,17 +28,19 @@ jar {
 
 repositories {
     mavenCentral()
-    maven { url "https://jitpack.io" }
-    maven { url "https://maven.lavalink.dev/releases" }
-    jcenter()
+    maven { url = "https://maven.lavalink.dev/releases" }
 }
 
 dependencies {
-    implementation group: 'net.dv8tion', name: 'JDA', version: '5.3.0'
-    implementation group: 'dev.arbjerg', name: 'lavaplayer', version: '2.2.3'
-    implementation group: 'com.github.aikaterna', name: 'lavaplayer-natives', version: 'original-SNAPSHOT'
-    implementation group: 'dev.lavalink.youtube', name: 'v2', version: '1.11.5'
-    implementation group: 'org.reflections', name: 'reflections', version: '0.10.2'
+    implementation 'net.dv8tion:JDA:6.6.0'
+    implementation 'club.minnced:jdave-api:0.1.8'
+    runtimeOnly 'club.minnced:jdave-native-linux-x86-64:0.1.8'
+    runtimeOnly 'club.minnced:jdave-native-linux-aarch64:0.1.8'
+    runtimeOnly 'club.minnced:jdave-native-darwin:0.1.8'
+    runtimeOnly 'club.minnced:jdave-native-win-x86-64:0.1.8'
+    implementation 'dev.arbjerg:lavaplayer:2.2.7'
+    implementation 'dev.lavalink.youtube:v2:1.18.2'
+    implementation 'org.reflections:reflections:0.10.2'
 
-    runtimeOnly group: 'org.slf4j', name: 'slf4j-reload4j', version: '2.0.17'
+    runtimeOnly 'org.slf4j:slf4j-reload4j:2.0.19'
 }

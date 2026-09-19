@@ -6,23 +6,17 @@ A Discord music bot using JDA and Lavaplayer. Commands: `/play` (URL or search),
 
 Create a Discord application/bot and invite it with the `bot` and `applications.commands` scopes. Grant View Channels, Send Messages, Embed Links, Connect, and Speak in the channels it uses. No privileged gateway intents are required.
 
-With Docker Compose installed:
+With Docker Compose installed and the GHCR image published:
 
 ```sh
 cp .env.example .env
 # Edit .env: set your Discord bot token and a long random cipher password.
-docker compose up -d --build
+docker compose pull
+docker compose up -d
 docker compose logs -f infinitybot
 ```
 
-This builds locally and starts a private [yt-cipher](https://github.com/kikkia/yt-cipher) service. No cipher port is exposed on the host, and no YouTube OAuth token is needed. The cipher image uses its upstream `master` tag; pin a tested digest for production.
-
-After this repository's workflow has published an image, use it instead of building:
-
-```sh
-docker compose pull
-docker compose up -d --no-build
-```
+This deploys the published InfinityBot image and a private [yt-cipher](https://github.com/kikkia/yt-cipher) service; Compose does not build images locally. No cipher port is exposed on the host, and no YouTube OAuth token is needed. The cipher image uses its upstream `master` tag; pin a tested digest for production. To update, run `docker compose pull` followed by `docker compose up -d` again.
 
 Images: `ghcr.io/nextinfinity/infinitybot:master` (development), release tags, `sha-<commit>` (short SHA), and `latest` (most recent non-prerelease publication). CI builds Linux amd64 images. Initial GHCR packages may need to be made public in package settings for anonymous pulls.
 

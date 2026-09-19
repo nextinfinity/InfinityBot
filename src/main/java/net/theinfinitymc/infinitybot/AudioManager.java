@@ -35,11 +35,6 @@ public class AudioManager {
 		}
 		YoutubeAudioSourceManager youtubeSource = new YoutubeAudioSourceManager(youtubeOptions,
 				new WebWithThumbnail(), new WebEmbeddedWithThumbnail());
-		// Remote cipher deployments do not need OAuth or an interactive login flow.
-		String oauthToken = System.getenv("YOUTUBE_OAUTH_TOKEN");
-		if ((cipherUrl == null || cipherUrl.isBlank()) && oauthToken != null && !oauthToken.isBlank()) {
-			youtubeSource.useOauth2(oauthToken, true);
-		}
 		audioPlayerManager.registerSourceManager(youtubeSource);
 		@SuppressWarnings("deprecation") Class<? extends AudioSourceManager> deprecatedYoutubeSource = com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager.class;
 		AudioSourceManagers.registerRemoteSources(audioPlayerManager, deprecatedYoutubeSource);

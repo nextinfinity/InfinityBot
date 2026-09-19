@@ -1,6 +1,6 @@
 services:
   infinitybot:
-    image: ghcr.io/nextinfinity/infinitybot:master
+    image: ghcr.io/nextinfinity/infinitybot:main
     restart: unless-stopped
     environment:
       DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN:?Set DISCORD_BOT_TOKEN in .env}

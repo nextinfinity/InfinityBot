@@ -34,12 +34,6 @@ Without remote cipher configured, the bot uses local deciphering.
 
 Cipher support solves signature deciphering, **not** YouTube IP blocks, age restrictions, or all sign-in challenges. Test playback on the intended deployment host. See [youtube-source remote cipher documentation](https://github.com/lavalink-devs/youtube-source#using-a-remote-cipher-server).
 
-## Release versioning
-
-Publish a GitHub release with a tag such as `v3.2.0`. The workflow strips the leading `v` and passes the version through Docker's `APP_VERSION` build argument to Gradle's `appVersion` property. The JAR filename and `Implementation-Version` manifest entry then use `3.2.0`; no manual Gradle version bump is needed. Tags without `v` and prerelease suffixes (e.g. `3.2.0-rc.1`) also work.
-
-Local, branch/PR, and manual workflow builds default to `0.0.0-SNAPSHOT`, including manual runs on tags. Override locally with `./gradlew clean shadowJar -PappVersion=3.2.0` or `docker build --build-arg APP_VERSION=3.2.0 -t infinitybot:3.2.0 .`. Image tagging is unchanged; only published non-prereleases update `latest`.
-
 ## Build locally
 
 Requires JDK 25. JDAVE provides Discord voice encryption (DAVE).

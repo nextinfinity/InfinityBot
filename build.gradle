@@ -33,6 +33,11 @@ jar {
 repositories {
     mavenCentral()
     maven { url = "https://maven.lavalink.dev/releases" }
+    maven {
+        url = "https://maven.lavalink.dev/snapshots"
+        content { includeGroup 'dev.lavalink.youtube' }
+        mavenContent { snapshotsOnly() }
+    }
 }
 
 dependencies {
@@ -43,7 +48,7 @@ dependencies {
     runtimeOnly 'club.minnced:jdave-native-darwin:0.1.8'
     runtimeOnly 'club.minnced:jdave-native-win-x86-64:0.1.8'
     implementation 'dev.arbjerg:lavaplayer:2.2.7'
-    implementation 'dev.lavalink.youtube:v2:1.18.2'
+    implementation 'dev.lavalink.youtube:v2:2be8e542d3f6f178e048dca565892684c2e40177-SNAPSHOT'
     implementation 'org.reflections:reflections:0.10.2'
 
     runtimeOnly 'org.slf4j:slf4j-reload4j:2.0.19'

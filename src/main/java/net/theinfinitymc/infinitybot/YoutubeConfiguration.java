@@ -31,7 +31,7 @@ final class YoutubeConfiguration {
         if (cipherUrl != null) {
             options.setRemoteCipher(cipherUrl, cipherPassword, "InfinityBot");
         }
-        // Configure both clients directly: YoutubeSource's convenience helper logs token values at DEBUG.
+
         Web.setPoTokenAndVisitorData(poToken, visitorData);
         WebEmbedded.setPoTokenAndVisitorData(poToken, visitorData);
 

@@ -23,15 +23,14 @@ final class YoutubeConfiguration {
         String poToken = environment("YOUTUBE_PO_TOKEN");
         String visitorData = environment("YOUTUBE_VISITOR_DATA");
 
-        if ((poToken == null) != (visitorData == null)) {
-            throw new IllegalArgumentException("YOUTUBE_PO_TOKEN and YOUTUBE_VISITOR_DATA must both be set or both be empty.");
-        }
-
         YoutubeSourceOptions options = new YoutubeSourceOptions();
         if (cipherUrl != null) {
             options.setRemoteCipher(cipherUrl, cipherPassword, "InfinityBot");
         }
 
+        if ((poToken == null) != (visitorData == null)) {
+            throw new IllegalArgumentException("YOUTUBE_PO_TOKEN and YOUTUBE_VISITOR_DATA must both be set or both be empty.");
+        }
         Web.setPoTokenAndVisitorData(poToken, visitorData);
         WebEmbedded.setPoTokenAndVisitorData(poToken, visitorData);
 
@@ -40,6 +39,7 @@ final class YoutubeConfiguration {
         if (refreshToken != null) {
             clients.add(new Tv());
         }
+
         YoutubeAudioSourceManager source = new YoutubeAudioSourceManager(options, clients.toArray(Client[]::new));
         if (refreshToken != null) {
             try {
@@ -51,6 +51,7 @@ final class YoutubeConfiguration {
                 throw new IllegalStateException("YouTube OAuth initialization failed. Check YOUTUBE_OAUTH_REFRESH_TOKEN and network access.");
             }
         }
+
         log.info("YouTube configured: remoteCipher={}, oauth={}, poToken={}, clients=[{}]",
                 cipherUrl != null, refreshToken != null, poToken != null,
                 clients.stream().map(Client::getIdentifier).collect(Collectors.joining(", ")));

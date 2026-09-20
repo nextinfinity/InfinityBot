@@ -21,11 +21,11 @@ public class AudioManager {
 	private final Map<Guild, GuildAudio> guildAudioMap;
 	
 	AudioManager(){
-		YoutubeAudioSourceManager youtubeSource = YoutubeConfiguration.createSource();
 		this.guildAudioMap = new HashMap<>();
 		this.audioPlayerManager = new DefaultAudioPlayerManager();
 
 		// Register default sources, but replace the deprecated YT source with new version
+		YoutubeAudioSourceManager youtubeSource = YoutubeConfiguration.createSource();
 		audioPlayerManager.registerSourceManager(youtubeSource);
 		@SuppressWarnings("deprecation") Class<? extends AudioSourceManager> deprecatedYoutubeSource = com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager.class;
 		AudioSourceManagers.registerRemoteSources(audioPlayerManager, deprecatedYoutubeSource);

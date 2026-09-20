@@ -9,8 +9,6 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import dev.lavalink.youtube.YoutubeAudioSourceManager;
-import dev.lavalink.youtube.YoutubeSourceOptions;
-import dev.lavalink.youtube.clients.*;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.User;
@@ -27,14 +25,7 @@ public class AudioManager {
 		this.audioPlayerManager = new DefaultAudioPlayerManager();
 
 		// Register default sources, but replace the deprecated YT source with new version
-		YoutubeSourceOptions youtubeOptions = new YoutubeSourceOptions();
-		String cipherUrl = System.getenv("YOUTUBE_REMOTE_CIPHER_URL");
-		if (cipherUrl != null && !cipherUrl.isBlank()) {
-			youtubeOptions.setRemoteCipher(cipherUrl,
-					System.getenv("YOUTUBE_REMOTE_CIPHER_PASSWORD"), "InfinityBot");
-		}
-		YoutubeAudioSourceManager youtubeSource = new YoutubeAudioSourceManager(youtubeOptions,
-				new WebWithThumbnail(), new WebEmbeddedWithThumbnail());
+		YoutubeAudioSourceManager youtubeSource = YoutubeConfiguration.createSource();
 		audioPlayerManager.registerSourceManager(youtubeSource);
 		@SuppressWarnings("deprecation") Class<? extends AudioSourceManager> deprecatedYoutubeSource = com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager.class;
 		AudioSourceManagers.registerRemoteSources(audioPlayerManager, deprecatedYoutubeSource);

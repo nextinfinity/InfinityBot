@@ -25,6 +25,8 @@ public class InfinityBot {
 
 	InfinityBot() {
 		try {
+			// Validate YouTube configuration before opening the Discord connection.
+			this.audioManager = new AudioManager();
 			CommandListener listener = new CommandListener();
 			this.jda = JDABuilder.createDefault(System.getenv("DISCORD_BOT_TOKEN"),
 							Collections.singletonList(GatewayIntent.GUILD_VOICE_STATES))
@@ -32,13 +34,10 @@ public class InfinityBot {
 							.withDaveSessionFactory(new JDaveSessionFactory()))
 					.addEventListeners(listener)
 					.build();
-			this.audioManager = new AudioManager();
 			listener.registerCommands(jda, audioManager);
 			updateActivity();
 		} catch (Exception exception) {
-			InstantiationError error = new InstantiationError("Failed to load InfinityBot.");
-			error.setStackTrace(exception.getStackTrace());
-			throw error;
+			throw new IllegalStateException("Failed to load InfinityBot.", exception);
 		}
 	}
 

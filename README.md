@@ -29,8 +29,19 @@ Images: `ghcr.io/nextinfinity/infinitybot:main` (development), release tags, `sh
 | `DISCORD_BOT_TOKEN` | Required Discord bot token. |
 | `YOUTUBE_REMOTE_CIPHER_URL` | Cipher base URL; Compose sets `http://yt-cipher:8001`. |
 | `YOUTUBE_REMOTE_CIPHER_PASSWORD` | Optional cipher API password; required by the provided Compose stack. |
+| `YOUTUBE_OAUTH_REFRESH_TOKEN` | Optional YouTube OAuth **refresh token**; enables the TV playback fallback. |
+| `YOUTUBE_PO_TOKEN` | Optional proof-of-origin token for Web clients; requires matching visitor data. |
+| `YOUTUBE_VISITOR_DATA` | Companion to `YOUTUBE_PO_TOKEN`; configure both or neither. |
 
-Without remote cipher configured, the bot uses local deciphering.
+Blank values are treated as unset. Cipher, OAuth, and poToken are independent and can be enabled together. Without remote cipher configured, the bot uses local deciphering.
+
+Clients are tried in this order: Music (search), Android VR, Web, Web Embedded, and TV (only with OAuth configured). OAuth applies to TV playback, while poToken is applied to Web and Web Embedded; configuring both broadens fallback coverage rather than combining credentials on the same client.
+
+OAuth access tokens are refreshed automatically by youtube-source. Initial authorization and replacement of a revoked refresh token remain manual; see [upstream OAuth instructions](https://github.com/lavalink-devs/youtube-source#using-oauth-tokens). Use a burner account, not your primary account: upstream warns of account-termination risk. The bot does not initiate an interactive login flow. If configured OAuth cannot initialize, startup fails rather than silently disabling it.
+
+poToken/visitor-data pairs are supplied manually and are not automatically generated or renewed. See [upstream poToken instructions](https://github.com/lavalink-devs/youtube-source#using-a-potoken). An incomplete pair fails startup before connecting to Discord. After changing `.env`, run `docker compose up -d` to recreate the bot with the new values.
+
+Startup logs show enabled authentication modes and client order without credential values. Playback failures/stalls produce a short guild-scoped warning; a failed Discord notification does not prevent queue advancement. There are no health probes or aggregate failure alerts. Avoid enabling upstream DEBUG logging or sharing unredacted upstream errors: these may contain credentials or signed playback URLs.
 
 Cipher support solves signature deciphering, **not** YouTube IP blocks, age restrictions, or all sign-in challenges. Test playback on the intended deployment host. See [youtube-source remote cipher documentation](https://github.com/lavalink-devs/youtube-source#using-a-remote-cipher-server).
 

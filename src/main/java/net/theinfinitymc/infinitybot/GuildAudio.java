@@ -12,6 +12,8 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion;
 import net.theinfinitymc.infinitybot.commands.Pause;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.time.Instant;
@@ -21,6 +23,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 @Value
 @EqualsAndHashCode(callSuper=false)
 public class GuildAudio extends AudioEventAdapter {
+	private static final Logger log = LoggerFactory.getLogger(GuildAudio.class);
 	Guild guild;
 	AudioPlayer player;
 	BlockingQueue<AudioTrack> queue;
@@ -125,7 +128,8 @@ public class GuildAudio extends AudioEventAdapter {
 	@Override
 	public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
 		if (endReason == AudioTrackEndReason.LOAD_FAILED) {
-			((Message) track.getUserData()).reply("Unable to play song - proceeding to next available.").queue();
+			log.warn("Playback failed in guild {}; advancing the queue.", guild.getId());
+			notifyFailure(track, "Unable to play song - proceeding to next available.");
 		}
 		if (endReason.mayStartNext) {
 			playNext();
@@ -136,7 +140,22 @@ public class GuildAudio extends AudioEventAdapter {
 
 	@Override
 	public void onTrackStuck(AudioPlayer player, AudioTrack track, long thresholdMs) {
-		((Message) track.getUserData()).reply("No audio detected, skipping track.").queue();
+		log.warn("Playback stuck in guild {}; advancing the queue.", guild.getId());
+		notifyFailure(track, "No audio detected, skipping track.");
 		playNext();
+	}
+
+	private void notifyFailure(AudioTrack track, String text) {
+		try {
+			Object data = track.getUserData();
+			if (data instanceof Message message) {
+				message.reply(text).queue(null, failure -> log.warn("Could not send playback failure notice in guild {}.", guild.getId()));
+			} else if (data instanceof GuildTrackData trackData) {
+				trackData.getChannel().sendMessage(text).queue(null, failure -> log.warn("Could not send playback failure notice in guild {}.", guild.getId()));
+			}
+		} catch (RuntimeException exception) {
+			// A missing message or permission must not prevent queue advancement.
+			log.warn("Could not send playback failure notice in guild {}.", guild.getId());
+		}
 	}
 }

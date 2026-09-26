@@ -43,6 +43,10 @@ poToken/visitor-data pairs are supplied manually and are not automatically gener
 
 Cipher support solves signature deciphering, **not** YouTube IP blocks, age restrictions, or all sign-in challenges. Test playback on the intended deployment host. See [youtube-source remote cipher documentation](https://github.com/lavalink-devs/youtube-source#using-a-remote-cipher-server).
 
+## Healthcheck
+
+The Docker image includes a healthcheck that polls JDA's Discord connection state, checking that the bot is connected rather than just running.
+
 ## Build locally
 
 Requires JDK 25. JDAVE provides Discord voice encryption (DAVE).

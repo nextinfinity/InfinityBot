@@ -36,7 +36,7 @@ public class InfinityBot {
 					.build();
 			listener.registerCommands(jda, audioManager);
 			updateActivity();
-			HealthCheck.start(jda::getStatus, 8080);
+			HealthCheck.start(jda);
 		} catch (Exception exception) {
 			throw new IllegalStateException("Failed to load InfinityBot.", exception);
 		}

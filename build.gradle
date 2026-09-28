@@ -51,5 +51,5 @@ dependencies {
     implementation 'dev.lavalink.youtube:v2:2be8e542d3f6f178e048dca565892684c2e40177-SNAPSHOT'
     implementation 'org.reflections:reflections:0.10.2'
 
-    runtimeOnly 'org.slf4j:slf4j-reload4j:2.0.19'
+    runtimeOnly 'org.slf4j:slf4j-reload4j:2.0.20'
 }

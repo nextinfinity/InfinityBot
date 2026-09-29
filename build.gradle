@@ -56,9 +56,13 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:5.23.0'
     mockitoAgent('org.mockito:mockito-core:5.23.0') { transitive = false }
 
-    // Align transitive Jackson modules across compile/runtime configurations.
-    implementation platform('com.fasterxml.jackson:jackson-bom:2.22.3')
     constraints {
+        implementation('com.fasterxml.jackson.core:jackson-core:2.22.3') {
+            because 'Fix GHSA-72hv-8253-57qq and GHSA-r7wm-3cxj-wff9 in transitive Jackson versions'
+        }
+        implementation('com.fasterxml.jackson.core:jackson-databind:2.22.3') {
+            because 'Fix reported Jackson databind vulnerabilities, including GHSA-q4xh-88c3-wmh7 and GHSA-gx83-3vf8-gh7j'
+        }
         implementation('commons-io:commons-io:2.22.0') {
             because 'Fix GHSA-78wr-2p64-hpwj in Lavaplayer/lava-common transitive dependencies'
         }

@@ -27,8 +27,14 @@ public class GuildAudio extends AudioEventAdapter {
 	Guild guild;
 	AudioPlayer player;
 	BlockingQueue<AudioTrack> queue;
+	Runnable activityChanged;
 
 	GuildAudio(Guild guild, AudioPlayer player) {
+		this(guild, player, () -> InfinityBot.instance.updateActivity());
+	}
+
+	GuildAudio(Guild guild, AudioPlayer player, Runnable activityChanged) {
+		this.activityChanged = activityChanged;
 		this.guild = guild;
 		this.player = player;
 		this.queue = new LinkedBlockingQueue<>();
@@ -101,7 +107,7 @@ public class GuildAudio extends AudioEventAdapter {
 
 	public void disconnect() {
 		guild.getAudioManager().closeAudioConnection();
-		InfinityBot.instance.updateActivity();
+		activityChanged.run();
 	}
 
 	public boolean isConnected() {
@@ -122,7 +128,7 @@ public class GuildAudio extends AudioEventAdapter {
 		Message message = trackData.getChannel().sendMessageEmbeds(embed.build()).complete();
 		track.setUserData(message);
 
-		InfinityBot.instance.updateActivity();
+		activityChanged.run();
 	}
 
 	@Override

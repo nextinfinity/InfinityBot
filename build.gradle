@@ -56,6 +56,23 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:5.23.0'
     mockitoAgent('org.mockito:mockito-core:5.23.0') { transitive = false }
 
+    // Align transitive Jackson modules across compile/runtime configurations.
+    implementation platform('com.fasterxml.jackson:jackson-bom:2.22.3')
+    constraints {
+        implementation('commons-io:commons-io:2.22.0') {
+            because 'Fix GHSA-78wr-2p64-hpwj in Lavaplayer/lava-common transitive dependencies'
+        }
+        implementation('org.jsoup:jsoup:1.23.2') {
+            because 'Fix GHSA-pmhh-3w7g-xqp8 in Lavaplayer transitive dependencies'
+        }
+        implementation('org.mozilla:rhino:1.7.15.1') {
+            because 'Fix GHSA-3w8q-xq97-5j7x without changing the Rhino release line'
+        }
+        implementation('org.mozilla:rhino-engine:1.7.15.1') {
+            because 'Keep the YouTube/Lavaplayer script engine aligned with patched Rhino'
+        }
+    }
+
     implementation 'net.dv8tion:JDA:6.7.0'
     implementation 'club.minnced:jdave-api:0.1.8'
     runtimeOnly 'club.minnced:jdave-native-linux-x86-64:0.1.8'

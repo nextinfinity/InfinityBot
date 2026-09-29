@@ -47,6 +47,23 @@ Cipher support solves signature deciphering, **not** YouTube IP blocks, age rest
 
 The Docker image includes a healthcheck that polls JDA's Discord connection state, checking that the bot is connected rather than just running.
 
+## Dependency security updates
+
+`build.gradle` declares a Jackson BOM and security constraints for Commons IO,
+jsoup, and Rhino (including its script engine). These override older transitive
+versions from Lavaplayer/YouTube without adding unused libraries or forcing
+exact versions; newer upstream versions can still win resolution. Dependabot
+can track the explicit coordinates instead of relying only on upstream releases.
+Keep Jackson modules aligned through the BOM and update Rhino/its engine together.
+
+After dependency changes, run `./gradlew clean check shadowJar` and inspect
+`./gradlew dependencies --configuration runtimeClasspath` (also check
+`compileClasspath`, which can resolve differently). Verify the selected version
+after any `->`, not just the upstream requested version. Playback should also
+be smoke-tested on the deployment host. Alerts refresh after the updated
+dependency graph is submitted from the default branch; do not dismiss them
+merely because the build passed.
+
 ## Tests
 
 Run `./gradlew test` with JDK 25. See [testing guidance](TESTING.md) for scope and conventions.

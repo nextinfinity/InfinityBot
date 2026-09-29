@@ -47,6 +47,11 @@ Cipher support solves signature deciphering, **not** YouTube IP blocks, age rest
 
 The Docker image includes a healthcheck that polls JDA's Discord connection state, checking that the bot is connected rather than just running.
 
+## Tests
+
+Run `./gradlew test` with JDK 25. See [testing guidance](TESTING.md) for scope and conventions.
+CI runs tests in a separate job before building or publishing the container.
+
 ## Build locally
 
 Requires JDK 25. JDAVE provides Discord voice encryption (DAVE).

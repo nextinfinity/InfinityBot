@@ -40,7 +40,22 @@ repositories {
     }
 }
 
+configurations {
+    mockitoAgent
+}
+
+tasks.named('test', Test) {
+    useJUnitPlatform()
+    jvmArgs "-javaagent:${configurations.mockitoAgent.singleFile}"
+}
+
 dependencies {
+    testImplementation platform('org.junit:junit-bom:6.0.3')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'org.mockito:mockito-core:5.23.0'
+    mockitoAgent('org.mockito:mockito-core:5.23.0') { transitive = false }
+
     implementation 'net.dv8tion:JDA:6.7.0'
     implementation 'club.minnced:jdave-api:0.1.8'
     runtimeOnly 'club.minnced:jdave-native-linux-x86-64:0.1.8'

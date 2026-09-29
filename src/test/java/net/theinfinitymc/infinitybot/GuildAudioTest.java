@@ -71,6 +71,7 @@ class GuildAudioTest {
     @ParameterizedTest
     @CsvSource({"FINISHED,true,false", "LOAD_FAILED,true,false", "REPLACED,false,false", "STOPPED,false,true", "CLEANUP,false,true"})
     void endReasonControlsAdvancementAndDisconnect(AudioTrackEndReason reason, boolean advance, boolean disconnect) {
+        verify(player).addListener(audio);
         audio.queue(second);
         when(player.startTrack(second, false)).thenReturn(true);
         audio.onTrackEnd(player, first, reason);

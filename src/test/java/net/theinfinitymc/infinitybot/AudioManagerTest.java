@@ -73,11 +73,18 @@ class AudioManagerTest {
             when(audio.queue(first)).thenReturn(false);
         }
         handler.playlistLoaded(playlist);
-        var order = inOrder(audio);
+        var order = inOrder(first, second, third, audio);
+        GuildTrackData metadata = new GuildTrackData(user, channel, guild);
+        order.verify(first).setUserData(metadata);
         order.verify(audio).queue(first);
+        order.verify(second).setUserData(metadata);
         order.verify(audio).queue(second);
-        verify(audio, times(search ? 0 : 1)).queue(third);
-        verify(second).setUserData(new GuildTrackData(user, channel, guild));
+        if (!search) {
+            order.verify(third).setUserData(metadata);
+            order.verify(audio).queue(third);
+        } else {
+            verify(audio, never()).queue(third);
+        }
         verify(callback).call(SUCCESS, search ? "Second" : "Playlist");
         verifyNoMoreInteractions(callback);
     }
@@ -89,7 +96,9 @@ class AudioManagerTest {
         AudioTrack track = track("Title");
         when(audio.queue(track)).thenReturn(accepted);
         handler.trackLoaded(track);
-        verify(track).setUserData(new GuildTrackData(user, channel, guild));
+        var order = inOrder(track, audio);
+        order.verify(track).setUserData(new GuildTrackData(user, channel, guild));
+        order.verify(audio).queue(track);
         verify(callback).call(accepted ? SUCCESS : FAILURE_QUEUE, accepted ? "Title" : "song");
     }
 
@@ -98,6 +107,21 @@ class AudioManagerTest {
         when(audio.isConnected()).thenReturn(true);
         assertTrue(manager.connectToGuild(audio, user, callback));
         verify(audio, never()).getGuild();
+        verifyNoInteractions(callback);
+    }
+
+    @Test
+    void firstRequestConnectsToRequestersVoiceChannelBeforeLoading() {
+        doReturn(audio).when(manager).getGuildAudio(guild);
+        when(audio.isConnected()).thenReturn(false);
+        when(audio.getGuild()).thenReturn(guild);
+        var voiceState = guild.getMember(user).getVoiceState();
+        when(voiceState.inAudioChannel()).thenReturn(true);
+        var voiceChannel = voiceState.getChannel();
+        manager.tryAddToQueue("song", guild, channel, user, callback);
+        var order = inOrder(audio, loader);
+        order.verify(audio).connect(voiceChannel);
+        order.verify(loader).loadItem(eq("song"), any(AudioLoadResultHandler.class));
         verifyNoInteractions(callback);
     }
 

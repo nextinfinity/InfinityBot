@@ -56,6 +56,27 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:5.23.0'
     mockitoAgent('org.mockito:mockito-core:5.23.0') { transitive = false }
 
+    constraints {
+        implementation('com.fasterxml.jackson.core:jackson-core:2.22.3') {
+            because 'Fix GHSA-72hv-8253-57qq and GHSA-r7wm-3cxj-wff9 in transitive Jackson versions'
+        }
+        implementation('com.fasterxml.jackson.core:jackson-databind:2.22.3') {
+            because 'Fix reported Jackson databind vulnerabilities, including GHSA-q4xh-88c3-wmh7 and GHSA-gx83-3vf8-gh7j'
+        }
+        implementation('commons-io:commons-io:2.22.0') {
+            because 'Fix GHSA-78wr-2p64-hpwj in Lavaplayer/lava-common transitive dependencies'
+        }
+        implementation('org.jsoup:jsoup:1.23.2') {
+            because 'Fix GHSA-pmhh-3w7g-xqp8 in Lavaplayer transitive dependencies'
+        }
+        implementation('org.mozilla:rhino:1.7.15.1') {
+            because 'Fix GHSA-3w8q-xq97-5j7x without changing the Rhino release line'
+        }
+        implementation('org.mozilla:rhino-engine:1.7.15.1') {
+            because 'Keep the YouTube/Lavaplayer script engine aligned with patched Rhino'
+        }
+    }
+
     implementation 'net.dv8tion:JDA:6.7.0'
     implementation 'club.minnced:jdave-api:0.1.8'
     runtimeOnly 'club.minnced:jdave-native-linux-x86-64:0.1.8'

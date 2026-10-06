@@ -1,12 +1,32 @@
 # InfinityBot
 
-A Discord music bot using JDA and Lavaplayer.
+A Discord music and timer bot using JDA and Lavaplayer.
 
-Commands: `/play` (URL or search), `/pause`, `/skip`, `/stop`, `/queue`, and `/volume` (0–100).
+Commands: `/play` (URL or search), `/pause`, `/skip`, `/stop`, `/queue`, `/volume` (0–100), and `/timer`.
+
+## Timers
+
+The `/timer` command incorporates [TimerBot](https://github.com/nextinfinity/TimerBot)'s timed reminders and optional voice return, useful for activities where users split into separate voice channels and regroup later.
+
+| Parameter | Purpose |
+| --- | --- |
+| `name` | Required friendly name for the timer. |
+| `text-channel` | Required text channel for the start, updates, and completion notice. |
+| `length` | Required duration in minutes (minimum 1). |
+| `notify-interval` | Optional update interval in minutes (minimum 1); defaults to no intermediate updates. |
+| `one-minute-warning` | Optional one-minute warning; off by default. |
+| `notify-mention` | Optional user or role to mention in every notice. |
+| `return-voice-channel` | Optional voice channel to move **all connected voice users in the server** to at completion. |
+
+For example: `/timer name:Break text-channel:#general length:10 notify-interval:5 one-minute-warning:True`.
+
+An interval update with one minute remaining becomes a single one-minute warning, even if the warning option is off. One-minute timers send only start and completion notices. Voice return runs three seconds after the completion message is successfully sent and uses membership at completion, not when the timer starts.
+
+Timers run in memory: restarting the bot loses pending notices and voice returns. Music commands remain independent of timers.
 
 ## Run (with yt-cipher)
 
-Create a Discord application/bot and invite it with the `bot` and `applications.commands` scopes. Grant View Channels, Send Messages, Embed Links, Connect, and Speak in the channels it uses. No privileged gateway intents are required.
+Create a Discord application/bot and invite it with the `bot` and `applications.commands` scopes. Grant View Channels, Send Messages, Embed Links, Connect, and Speak in the channels it uses. Timers need View Channels and Send Messages in their target text channel; voice return additionally requires Move Members and access to the destination voice channel. Mentioning roles may require mention permissions. No privileged gateway intents are required.
 
 With Docker Compose installed and the GHCR image published:
 

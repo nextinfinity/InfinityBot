@@ -17,6 +17,10 @@ JUnit Jupiter and Mockito test our decisions, not the external services:
 - `YoutubeConfigurationTest`: pure environment parsing, blank/trimmed values,
   independent optional settings, paired poToken/visitor data, and credential
   redaction in parsed settings' string representation and validation errors.
+- `TimerTest`: default and interval notice schedules, one-minute warning
+  deduplication, mentions, guild-only invocation, and completion-time voice return
+  for connected members only. Scheduled notices and completion callbacks are
+  captured without waiting or contacting Discord.
 
 Tests inject the loader and activity callback, manually deliver load/playback
 callbacks, and parse configuration from a map. They never construct a connected
@@ -37,6 +41,8 @@ agent for modern JDKs; no application runtime dependency is added.
 - Add a focused regression test when fixing a substantive bug.
 
 After deployment or dependency updates, manually check Discord connectivity,
-playback, queue advancement, pause, and stop on the intended host. YouTube/IP,
-cipher, and voice transport issues belong to this operational smoke check, not
+playback, queue advancement, pause, and stop on the intended host. Also create a
+short `/timer` with updates, a mention, and a voice-return destination; verify
+notice delivery and voice movement with the bot's actual channel permissions.
+YouTube/IP, cipher, and voice transport issues belong to this operational smoke check, not
 the deterministic Gradle suite.

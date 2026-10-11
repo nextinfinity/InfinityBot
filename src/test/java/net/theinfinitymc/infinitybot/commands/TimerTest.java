@@ -1,5 +1,9 @@
 package net.theinfinitymc.infinitybot.commands;
 
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.SelfMember;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
@@ -28,11 +32,14 @@ class TimerTest {
     private record Notice(String text, long minutes, MessageCreateAction action) {}
     private final List<Notice> notices = new ArrayList<>();
     private final Map<MessageCreateAction, Consumer<Message>> callbacks = new HashMap<>();
+    private final SelfMember self = mock(SelfMember.class);
     private final TextChannel channel = mock(TextChannel.class);
     private final SlashCommandInteractionEvent event = mock(SlashCommandInteractionEvent.class, RETURNS_DEEP_STUBS);
 
     private void prepare(long length, Long interval, boolean warning) {
         when(event.isFromGuild()).thenReturn(true);
+        when(event.getGuild().getSelfMember()).thenReturn(self);
+        when(self.hasPermission(any(GuildChannel.class), any(Permission[].class))).thenReturn(true);
         when(event.getOption("name").getAsString()).thenReturn("Game");
         when(event.getOption("text-channel").getAsChannel().asTextChannel()).thenReturn(channel);
         when(event.getOption("length").getAsLong()).thenReturn(length);
@@ -112,6 +119,80 @@ class TimerTest {
         new Timer(null).execute(event);
         verify(event, never()).getOption(anyString());
         verifyNoInteractions(channel);
+    }
+
+    @Test
+    void administratorIsOnlyTheDefaultNotAnExecutionRequirement() {
+        Timer timer = new Timer(null);
+        assertEquals(Long.valueOf(Permission.ADMINISTRATOR.getRawValue()),
+            timer.getDefaultPermissions().getPermissionsRaw());
+        prepare(3, null, false);
+        timer.execute(event);
+        assertEquals(List.of(0L, 3L), notices.stream().map(Notice::minutes).toList());
+        verify(event, never()).getMember();
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "VIEW_CHANNEL,false", "MESSAGE_SEND,false",
+        "VIEW_CHANNEL,true", "VOICE_CONNECT,true", "VOICE_MOVE_OTHERS,true"
+    })
+    void missingBotPermissionRejectsBeforeSendingOrScheduling(Permission missing, boolean voice) {
+        prepare(5, null, false);
+        GuildChannel target = channel;
+        if (voice) {
+            VoiceChannel destination = mock(VoiceChannel.class);
+            OptionMapping option = mock(OptionMapping.class, RETURNS_DEEP_STUBS);
+            when(option.getAsChannel().asVoiceChannel()).thenReturn(destination);
+            when(event.getOption("return-voice-channel")).thenReturn(option);
+            when(event.getGuild().getChannels()).thenReturn(List.of(destination));
+            target = destination;
+        }
+        when(self.hasPermission(eq(target), any(Permission[].class))).thenAnswer(call ->
+            !List.of((Permission[]) call.getRawArguments()[1]).contains(missing));
+        new Timer(null).execute(event);
+        verify(channel, never()).sendMessage(anyString());
+        assertTrue(notices.isEmpty());
+        String error = missing == Permission.VOICE_MOVE_OTHERS ? "Move Members"
+            : voice ? "return voice channel" : "text channel";
+        verify(event.getHook()).editOriginal(contains(error));
+    }
+
+    @Test
+    void voiceReturnChecksUnoccupiedSourceStageChannelsToo() {
+        prepare(3, null, false);
+        VoiceChannel destination = mock(VoiceChannel.class);
+        var source = mock(net.dv8tion.jda.api.entities.channel.concrete.StageChannel.class);
+        OptionMapping option = mock(OptionMapping.class, RETURNS_DEEP_STUBS);
+        when(option.getAsChannel().asVoiceChannel()).thenReturn(destination);
+        when(event.getOption("return-voice-channel")).thenReturn(option);
+        when(event.getGuild().getChannels()).thenReturn(List.of(destination, source));
+        when(self.hasPermission(source, Permission.VOICE_MOVE_OTHERS)).thenReturn(false);
+        new Timer(null).execute(event);
+        verify(channel, never()).sendMessage(anyString());
+        verify(event.getHook()).editOriginal(contains("Move Members"));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"true,false,true", "false,true,true", "false,false,false"})
+    void roleMentionRequiresMentionableRoleOrBotMentionPermission(
+            boolean mentionable, boolean permission, boolean accepted) {
+        prepare(3, null, false);
+        Role role = mock(Role.class);
+        when(role.getAsMention()).thenReturn("<@&123>");
+        when(role.isMentionable()).thenReturn(mentionable);
+        OptionMapping option = mock(OptionMapping.class);
+        when(option.getAsMentionable()).thenReturn(role);
+        when(event.getOption("notify-mention")).thenReturn(option);
+        when(self.hasPermission(channel, Permission.MESSAGE_MENTION_EVERYONE)).thenReturn(permission);
+        new Timer(null).execute(event);
+        if (accepted) {
+            assertEquals(List.of(0L, 3L), notices.stream().map(Notice::minutes).toList());
+            assertTrue(notices.stream().allMatch(n -> n.text().startsWith("<@&123> ")));
+        } else {
+            verify(channel, never()).sendMessage(anyString());
+            verify(event.getHook()).editOriginal(contains("Mention Everyone"));
+        }
     }
 
     private void complete(long length) {

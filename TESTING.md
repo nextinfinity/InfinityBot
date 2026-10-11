@@ -19,7 +19,9 @@ JUnit Jupiter and Mockito test our decisions, not the external services:
   redaction in parsed settings' string representation and validation errors.
 - `TimerTest`: default and interval notice schedules, one-minute warning
   deduplication, mentions, guild-only invocation, and completion-time voice return
-  for connected members only. Scheduled notices and completion callbacks are
+  for connected members only, Administrator defaults without caller enforcement,
+  and bot-permission preflight (text, destination voice, source voice/stage, and
+  non-mentionable roles). Scheduled notices and completion callbacks are
   captured without waiting or contacting Discord.
 
 Tests inject the loader and activity callback, manually deliver load/playback

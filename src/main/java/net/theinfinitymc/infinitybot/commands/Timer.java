@@ -1,12 +1,16 @@
 package net.theinfinitymc.infinitybot.commands;
 
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
+import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -43,6 +47,11 @@ public class Timer extends Command {
 		);
 	}
 
+	@Override
+	public DefaultMemberPermissions getDefaultPermissions() {
+		return DefaultMemberPermissions.enabledFor(Permission.ADMINISTRATOR);
+	}
+
 	public void execute(SlashCommandInteractionEvent event) {
 		if (!event.isFromGuild()) {
 			event.getHook().editOriginal("Timers can only be created in a server.").queue();
@@ -68,6 +77,33 @@ public class Timer extends Command {
 
 		final OptionMapping voiceChannelOption = event.getOption("return-voice-channel");
 		final VoiceChannel voiceChannel = voiceChannelOption != null ? voiceChannelOption.getAsChannel().asVoiceChannel() : null;
+
+		// Validate bot permissions before sending or scheduling any notices.
+		// Caller access is controlled by Discord's command permissions, not here.
+		final Member self = Objects.requireNonNull(event.getGuild()).getSelfMember();
+		if (!self.hasPermission(textChannel, Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND)) {
+			event.getHook().editOriginal("I need View Channel and Send Messages in the timer's text channel.").queue();
+			return;
+		}
+		if (mentionOption != null && mentionOption.getAsMentionable() instanceof Role role
+				&& !role.isMentionable() && !self.hasPermission(textChannel, Permission.MESSAGE_MENTION_EVERYONE)) {
+			event.getHook().editOriginal("I need Mention Everyone permission in the timer's text channel to mention that role.").queue();
+			return;
+		}
+		if (voiceChannel != null) {
+			if (!self.hasPermission(voiceChannel, Permission.VIEW_CHANNEL, Permission.VOICE_CONNECT)) {
+				event.getHook().editOriginal("I need View Channel and Connect in the return voice channel.").queue();
+				return;
+			}
+			// Members may change channels during the timer, so check every possible source,
+			// including stage channels, rather than just currently occupied channels.
+			for (var channel : Objects.requireNonNull(event.getGuild()).getChannels()) {
+				if (channel instanceof AudioChannel && !self.hasPermission(channel, Permission.VOICE_MOVE_OTHERS)) {
+					event.getHook().editOriginal("I need Move Members in every voice and stage channel to return all users.").queue();
+					return;
+				}
+			}
+		}
 
 		// Reply to the actual slash command
 

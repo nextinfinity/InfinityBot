@@ -18,6 +18,10 @@ The `/timer` command incorporates [TimerBot](https://github.com/nextinfinity/Tim
 | `notify-mention` | Optional user or role to mention in every notice. |
 | `return-voice-channel` | Optional voice channel to move **all connected voice users in the server** to at completion. |
 
+`/timer` defaults to **Administrator** access. Server admins can grant access to other roles or users through Discord's standard command permissions; the bot does not impose an additional caller permission check.
+
+Before scheduling, the bot checks its own text-channel permissions, permission to mention a non-mentionable role when requested, destination voice-channel access, and Move Members in every voice/stage channel when voice return is requested. Missing permissions reject the entire timer with an explanatory reply. Permissions can still change while a timer is running.
+
 For example: `/timer name:Break text-channel:#general length:10 notify-interval:5 one-minute-warning:True`.
 
 An interval update with one minute remaining becomes a single one-minute warning, even if the warning option is off. One-minute timers send only start and completion notices. Voice return runs three seconds after the completion message is successfully sent and uses membership at completion, not when the timer starts.
@@ -26,7 +30,7 @@ Timers run in memory: restarting the bot loses pending notices and voice returns
 
 ## Run (with yt-cipher)
 
-Create a Discord application/bot and invite it with the `bot` and `applications.commands` scopes. Grant View Channels, Send Messages, Embed Links, Connect, and Speak in the channels it uses. Timers need View Channels and Send Messages in their target text channel; voice return additionally requires Move Members and access to the destination voice channel. Mentioning roles may require mention permissions. No privileged gateway intents are required.
+Create a Discord application/bot and invite it with the `bot` and `applications.commands` scopes. Grant View Channels, Send Messages, Embed Links, Connect, and Speak in the channels it uses. Timers need View Channels and Send Messages in their target text channel; voice return additionally requires Move Members in every source voice/stage channel and View Channel/Connect in the destination voice channel. Mentioning roles may require mention permissions. No privileged gateway intents are required.
 
 With Docker Compose installed and the GHCR image published:
 

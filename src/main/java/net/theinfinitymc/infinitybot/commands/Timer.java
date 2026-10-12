@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -97,7 +98,7 @@ public class Timer extends Command {
 			}
 			// Members may change channels during the timer, so check every possible source,
 			// including stage channels, rather than just currently occupied channels.
-			for (var channel : Objects.requireNonNull(event.getGuild()).getChannels()) {
+			for (GuildChannel channel : Objects.requireNonNull(event.getGuild()).getChannels()) {
 				if (channel instanceof AudioChannel && !self.hasPermission(channel, Permission.VOICE_MOVE_OTHERS)) {
 					event.getHook().editOriginal("I need Move Members in every voice and stage channel to return all users.").queue();
 					return;

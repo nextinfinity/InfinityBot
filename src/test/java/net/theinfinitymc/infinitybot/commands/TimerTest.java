@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.channel.concrete.StageChannel;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -162,7 +163,7 @@ class TimerTest {
     void voiceReturnChecksUnoccupiedSourceStageChannelsToo() {
         prepare(3, null, false);
         VoiceChannel destination = mock(VoiceChannel.class);
-        var source = mock(net.dv8tion.jda.api.entities.channel.concrete.StageChannel.class);
+        StageChannel source = mock(StageChannel.class);
         OptionMapping option = mock(OptionMapping.class, RETURNS_DEEP_STUBS);
         when(option.getAsChannel().asVoiceChannel()).thenReturn(destination);
         when(event.getOption("return-voice-channel")).thenReturn(option);

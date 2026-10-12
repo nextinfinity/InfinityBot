@@ -2,11 +2,11 @@
 
 A Discord music bot using JDA and Lavaplayer.
 
-Commands: `/play` (URL or search), `/pause`, `/skip`, `/stop`, `/queue`, and `/volume` (0–100).
+Commands: `/play` (URL or search), `/pause`, `/skip`, `/stop`, `/queue`, `/volume` (0–100), and `/timer`.
 
 ## Run (with yt-cipher)
 
-Create a Discord application/bot and invite it with the `bot` and `applications.commands` scopes. Grant View Channels, Send Messages, Embed Links, Connect, and Speak in the channels it uses. No privileged gateway intents are required.
+Create a Discord application/bot and invite it with the `bot` and `applications.commands` scopes. Grant View Channels, Send Messages, Embed Links, Connect, and Speak in the channels it uses. Timers need View Channels and Send Messages in their target text channel; voice return additionally requires Move Members in every source voice/stage channel and View Channel/Connect in the destination voice channel. Mentioning roles may require mention permissions. No privileged gateway intents are required.
 
 With Docker Compose installed and the GHCR image published:
 

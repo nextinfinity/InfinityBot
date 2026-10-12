@@ -29,7 +29,9 @@ public class CommandListener extends ListenerAdapter {
 		for (Class<?> commandClass : commandClasses) {
             try {
 				Command command = commandClass.asSubclass(Command.class).getConstructor(AudioManager.class).newInstance(audioManager);
-				commandListUpdateAction = commandListUpdateAction.addCommands(Commands.slash(command.getName(), command.getDescription()).addOptions(command.getOptions()));
+				commandListUpdateAction = commandListUpdateAction.addCommands(Commands.slash(command.getName(), command.getDescription())
+						.setDefaultPermissions(command.getDefaultPermissions())
+						.addOptions(command.getOptions()));
 				commands.put(command.getName(), command);
             } catch (Exception e) {
                 throw new RuntimeException(e);

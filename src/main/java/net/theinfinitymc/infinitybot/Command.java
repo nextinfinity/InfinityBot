@@ -2,6 +2,7 @@ package net.theinfinitymc.infinitybot;
 
 import lombok.Data;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.util.List;
@@ -12,6 +13,10 @@ public abstract class Command {
 	private final String name;
 	private final String description;
 	private final List<OptionData> options;
+
+	public DefaultMemberPermissions getDefaultPermissions() {
+		return DefaultMemberPermissions.ENABLED;
+	}
 
 	public abstract void execute(SlashCommandInteractionEvent event);
 }

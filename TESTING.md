@@ -24,6 +24,17 @@ JUnit Jupiter and Mockito test our decisions, not the external services:
   non-mentionable roles). Scheduled notices and completion callbacks are
   captured without waiting or contacting Discord.
 
+- Scheduling tests (`polls/`): shorthand date/year inference and rollover,
+  weekday checkbox defaults, inclusive/filter boundaries, 25-date limits,
+  availability counts and ranking, vote replacement/withdrawal, closed-poll
+  rejection, permissions/guild/channel isolation, and modal acknowledgement.
+  Temporary real SQLite databases cover persistence, concurrent voters,
+  finalization/cancellation, event claims and crash recovery. Mocked Discord
+  callbacks cover event creation, failure, reconciliation, and duplicate-request
+  prevention. A manually driven scheduler checks batched/in-flight message
+  updates; UI boundary tests check checkbox grouping at 10/20-date boundaries,
+  maximum-size forms, preselected answers, and paginated details.
+
 Tests inject the loader and activity callback, manually deliver load/playback
 callbacks, and parse configuration from a map. They never construct a connected
 bot or authenticate with YouTube. Mockito is supplied as an explicit test JVM
@@ -48,3 +59,10 @@ short `/timer` with updates, a mention, and a voice-return destination; verify
 notice delivery and voice movement with the bot's actual channel permissions.
 YouTube/IP, cipher, and voice transport issues belong to this operational smoke check, not
 the deterministic Gradle suite.
+
+For scheduling, follow the [temporary-bot live-test checklist](docs/scheduling.md#small-live-test-no-docker-required).
+`./scripts/run-local.sh` runs the suite, builds a shaded jar, and prompts privately
+for a temporary bot token. Use a distinct application so command registration and
+live interactions do not interfere with the production bot. Verify forms on both
+desktop and mobile: Discord client rendering and real API permission enforcement
+are intentionally outside the unit tests.

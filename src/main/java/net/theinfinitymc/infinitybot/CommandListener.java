@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 import org.reflections.Reflections;
+import net.theinfinitymc.infinitybot.polls.PollListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +25,8 @@ public class CommandListener extends ListenerAdapter {
 		Reflections reflections = new Reflections("net.theinfinitymc.infinitybot");
 		Set<Class<?>> commandClasses = reflections.get(SubTypes.of(Command.class).asClass());
 
-		CommandListUpdateAction commandListUpdateAction = jda.updateCommands();
+		// Polls acknowledge their own interactions so /poll can open a modal immediately.
+		CommandListUpdateAction commandListUpdateAction = jda.updateCommands().addCommands(PollListener.commandData());
 
 		for (Class<?> commandClass : commandClasses) {
             try {

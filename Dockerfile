@@ -9,6 +9,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends curl \
     && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
+RUN mkdir -p /app/data && chown 10001:10001 /app/data
 COPY --from=builder /app/build/libs/InfinityBot-*-all.jar /app/InfinityBot.jar
 USER 10001:10001
 HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \

@@ -4,6 +4,10 @@
 .gradle
 .idea/
 /build/
+/data/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
 bin/
 out/
 

@@ -1,8 +1,32 @@
 # InfinityBot
 
-A Discord music bot using JDA and Lavaplayer.
+A Discord music, timer, and scheduling bot using JDA and Lavaplayer.
 
-Commands: `/play` (URL or search), `/pause`, `/skip`, `/stop`, `/queue`, `/volume` (0–100), and `/timer`.
+Commands: `/play` (URL or search), `/pause`, `/skip`, `/stop`, `/queue`, `/volume` (0–100), `/timer`, and `/poll`.
+
+## Scheduling
+
+`/poll` opens a form for an event title, inclusive date range, and seven
+weekday checkboxes (all checked initially; maximum 25 candidate dates). Dates
+accept `M/D` or `MM-DD` with the year inferred, or explicit `YYYY-MM-DD`.
+Members check the dates they can attend; unchecked dates count as unavailable.
+Responses are editable, and the original message shows a live availability list,
+highlighting the strongest dates. Details shows who can attend each date.
+
+The creator or a server administrator can finalize a date or cancel the poll.
+Optional Discord event creation collects time, timezone, duration, and voice
+channel/location at finalization. All results and controls live on the original
+poll message; deleting it makes the poll inaccessible. `/poll` defaults to
+Administrator access, delegatable through Discord command permissions; members
+vote through the message buttons.
+
+Polls persist in SQLite across restarts. Compose mounts a persistent `poll-data`
+volume; do not delete it when updating. Poll messages need View Channel, Send
+Messages, and Embed Links. Optional events need Create Events, plus View Channel
+and Connect for voice events. No additional privileged intents are needed.
+
+See [scheduling details and live-test instructions](docs/scheduling.md), including
+`./scripts/run-local.sh` for a temporary bot test without Docker.
 
 ## Run (with yt-cipher)
 
@@ -27,6 +51,7 @@ Images: `ghcr.io/nextinfinity/infinitybot:main` (development), release tags, `sh
 | Environment variable | Purpose |
 | --- | --- |
 | `DISCORD_BOT_TOKEN` | Required Discord bot token. |
+| `POLL_DATABASE_PATH` | SQLite poll database; standalone default `data/polls.sqlite`, Compose uses `/app/data/polls.sqlite` in a named volume. |
 | `YOUTUBE_REMOTE_CIPHER_URL` | Cipher base URL; Compose sets `http://yt-cipher:8001`. |
 | `YOUTUBE_REMOTE_CIPHER_PASSWORD` | Optional cipher API password; required by the provided Compose stack. |
 | `YOUTUBE_OAUTH_REFRESH_TOKEN` | Optional YouTube OAuth **refresh token**; enables the TV playback fallback. |

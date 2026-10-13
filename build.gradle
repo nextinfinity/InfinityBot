@@ -46,7 +46,7 @@ configurations {
 
 tasks.named('test', Test) {
     useJUnitPlatform()
-    jvmArgs "-javaagent:${configurations.mockitoAgent.singleFile}"
+    jvmArgs "-javaagent:${configurations.mockitoAgent.singleFile}", '--enable-native-access=ALL-UNNAMED'
 }
 
 dependencies {
@@ -77,6 +77,7 @@ dependencies {
         }
     }
 
+    runtimeOnly 'org.xerial:sqlite-jdbc:3.53.4.0'
     implementation 'net.dv8tion:JDA:6.7.0'
     implementation 'club.minnced:jdave-api:0.1.8'
     runtimeOnly 'club.minnced:jdave-native-linux-x86-64:0.1.8'
